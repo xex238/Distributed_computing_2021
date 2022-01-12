@@ -1,0 +1,73 @@
+08.01.2022 19:02:55 |  | cc_config.xml not found - using defaults
+08.01.2022 19:02:55 |  | Starting BOINC client version 7.16.20 for windows_x86_64
+08.01.2022 19:02:55 |  | log flags: file_xfer, sched_ops, task
+08.01.2022 19:02:55 |  | Libraries: libcurl/7.47.1 OpenSSL/1.0.2s zlib/1.2.8
+08.01.2022 19:02:55 |  | Data directory: C:\ProgramData\BOINC
+08.01.2022 19:02:55 |  | Running under account dmitriy
+08.01.2022 19:02:58 |  | OpenCL: AMD/ATI GPU 0: AMD Radeon(TM) R3 Graphics (driver version 3075.13, device version OpenCL 2.0 AMD-APP (3075.13), 3485MB, 3485MB available, 175 GFLOPS peak)
+08.01.2022 19:02:58 |  | OpenCL: AMD/ATI GPU 1 (ignored by config): AMD Radeon(TM) R3 Graphics (driver version 3075.13, device version OpenCL 1.2 AMD-APP (3075.13), 2048MB, 2048MB available, 438 GFLOPS peak)
+08.01.2022 19:03:05 |  | Windows processor group 0: 4 processors
+08.01.2022 19:03:05 |  | Host name: DESKTOP-1UK0DJS
+08.01.2022 19:03:05 |  | Processor: 4 AuthenticAMD AMD A4-7210 APU with AMD Radeon R3 Graphics [Family 22 Model 48 Stepping 1]
+08.01.2022 19:03:05 |  | Processor features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 htt pni ssse3 cx16 sse4_1 sse4_2 movebe popcnt aes f16c rdrandsyscall nx lm avx sse4a osvw wdt topx page1gb rdtscp bmi1
+08.01.2022 19:03:05 |  | OS: Microsoft Windows 10: Professional x64 Edition, (10.00.19044.00)
+08.01.2022 19:03:05 |  | Memory: 6.91 GB physical, 9.41 GB virtual
+08.01.2022 19:03:05 |  | Disk: 217.93 GB total, 23.60 GB free
+08.01.2022 19:03:05 |  | Local time is UTC +3 hours
+08.01.2022 19:03:05 |  | WSL detected:
+08.01.2022 19:03:05 |  | [docker-desktop] (default): Linux  (cat: can't open '/etc/redhat-release': No such file or directory [5.10.16.3-microsoft-standard-WSL2])
+08.01.2022 19:03:05 | Milkyway@Home | General prefs: from Milkyway@Home (last modified 15-Oct-2021 22:02:38)
+08.01.2022 19:03:05 | Milkyway@Home | Host location: none
+08.01.2022 19:03:05 | Milkyway@Home | General prefs: using your defaults
+08.01.2022 19:03:05 |  | Reading preferences override file
+08.01.2022 19:03:05 |  | Preferences:
+08.01.2022 19:03:05 |  | max memory usage when active: 3537.30 MB
+08.01.2022 19:03:05 |  | max memory usage when idle: 6367.14 MB
+08.01.2022 19:03:06 |  | max disk usage: 5.00 GB
+08.01.2022 19:03:06 |  | (to change preferences, visit a project web site or select Preferences in the Manager)
+08.01.2022 19:03:06 |  | Setting up project and slot directories
+08.01.2022 19:03:06 |  | Checking active tasks
+08.01.2022 19:03:06 | boincserver | URL http://51.250.10.194/boincserver/; Computer ID 5; resource share 100
+08.01.2022 19:03:06 | Cosmology@Home | URL http://www.cosmologyathome.org/; Computer ID 447237; resource share 100
+08.01.2022 19:03:06 | Einstein@Home | URL http://einstein.phys.uwm.edu/; Computer ID 12905417; resource share 100
+08.01.2022 19:03:06 | Milkyway@Home | URL http://milkyway.cs.rpi.edu/milkyway/; Computer ID 904667; resource share 100
+08.01.2022 19:03:06 |  | Setting up GUI RPC socket
+08.01.2022 19:03:06 |  | Checking presence of 154 project files
+08.01.2022 19:25:33 |  | Fetching configuration file from http://51.250.12.147/boincserver/get_project_config.php
+08.01.2022 19:26:36 | boincserver | Fetching scheduler list
+08.01.2022 19:26:37 | boincserver | Master file download succeeded
+08.01.2022 19:26:42 | boincserver | Sending scheduler request: Project initialization.
+08.01.2022 19:26:42 | boincserver | Requesting new tasks for CPU and AMD/ATI GPU
+08.01.2022 19:26:43 | boincserver | Scheduler request completed: got 0 new tasks
+08.01.2022 19:26:43 | boincserver | Already attached to a project named boincserver (possibly with wrong URL)
+08.01.2022 19:26:43 | boincserver | Consider detaching this project, then trying again
+08.01.2022 19:26:43 | boincserver | Project has no tasks available
+08.01.2022 19:26:43 | boincserver | Project requested delay of 7 seconds
+08.01.2022 19:33:34 | boincserver | update requested by user
+08.01.2022 19:33:38 | boincserver | Sending scheduler request: Requested by user.
+08.01.2022 19:33:38 | boincserver | Not requesting tasks: don't need (CPU: job cache full; AMD/ATI GPU: )
+08.01.2022 19:33:39 | boincserver | Scheduler request completed
+08.01.2022 19:33:39 | boincserver | This project seems to have changed its URL.  When convenient, remove the project, then add http://127.0.0.1/boincserver/
+08.01.2022 19:33:39 | boincserver | Already attached to a project named boincserver (possibly with wrong URL)
+08.01.2022 19:33:39 | boincserver | Consider detaching this project, then trying again
+08.01.2022 19:33:39 | boincserver | Project requested delay of 7 seconds
+08.01.2022 19:33:44 | boincserver | update requested by user
+08.01.2022 19:33:49 | boincserver | Sending scheduler request: Requested by user.
+08.01.2022 19:33:49 | boincserver | Not requesting tasks: don't need (CPU: job cache full; AMD/ATI GPU: )
+08.01.2022 19:33:50 | boincserver | Scheduler request completed
+08.01.2022 19:33:50 | boincserver | Already attached to a project named boincserver (possibly with wrong URL)
+08.01.2022 19:33:50 | boincserver | Consider detaching this project, then trying again
+08.01.2022 19:33:50 | boincserver | Project requested delay of 7 seconds
+08.01.2022 19:34:02 | boincserver | Resetting project
+08.01.2022 19:34:02 | boincserver | Detaching from project
+08.01.2022 19:34:04 | boincserver | update requested by user
+08.01.2022 19:34:05 | boincserver | Sending scheduler request: Requested by user.
+08.01.2022 19:34:05 | boincserver | Not requesting tasks: don't need (CPU: job cache full; AMD/ATI GPU: )
+08.01.2022 19:34:06 | boincserver | Scheduler request completed
+08.01.2022 19:34:06 | boincserver | Project requested delay of 7 seconds
+
+08.01.2022 19:35:37 | boincserver | update requested by user
+08.01.2022 19:35:42 | boincserver | Sending scheduler request: Requested by user.
+08.01.2022 19:35:42 | boincserver | Not requesting tasks: don't need (CPU: job cache full; AMD/ATI GPU: )
+08.01.2022 19:35:43 | boincserver | Scheduler request completed
+08.01.2022 19:35:43 | boincserver | Project requested delay of 7 seconds

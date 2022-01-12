@@ -1,0 +1,211 @@
+Sat 08 Jan 2022 06:25:13 AM UTC |  | Starting BOINC client version 7.16.6 for x86_64-pc-linux-gnu
+Sat 08 Jan 2022 06:25:13 AM UTC |  | log flags: file_xfer, sched_ops, task
+Sat 08 Jan 2022 06:25:13 AM UTC |  | Libraries: libcurl/7.68.0 OpenSSL/1.1.1f zlib/1.2.11 brotli/1.0.7 libidn2/2.2.0 libpsl/0.21.0 (+libidn2/2.2.0) libssh/0.9.3/openssl/zlib nghttp2/1.40.0 librtmp/2.3
+Sat 08 Jan 2022 06:25:13 AM UTC |  | Data directory: /var/lib/boinc-client
+Sat 08 Jan 2022 06:25:13 AM UTC |  | No usable GPUs found
+Sat 08 Jan 2022 06:25:14 AM UTC |  | libc: Ubuntu GLIBC 2.31-0ubuntu9.2 version 2.31
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Host name: course-work
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Processor: 2 GenuineIntel Intel Xeon Processor (Icelake) [Family 6 Model 106 Stepping 0]
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Processor features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch cpuid_fault invpcid_single ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 arat avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq md_clear arch_capabilities
+Sat 08 Jan 2022 06:25:14 AM UTC |  | OS: Linux Ubuntu: Ubuntu 20.04.3 LTS [5.4.0-90-generic|libc 2.31 (Ubuntu GLIBC 2.31-0ubuntu9.2)]
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Memory: 5.81 GB physical, 0 bytes virtual
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Disk: 98.40 GB total, 70.79 GB free
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Local time is UTC +0 hours
+Sat 08 Jan 2022 06:25:14 AM UTC |  | VirtualBox version: 6.1.26_Ubuntur145957
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Config: GUI RPCs allowed from:
+Sat 08 Jan 2022 06:25:14 AM UTC | boincserver | General prefs: from boincserver (last modified 05-Jan-2022 20:43:03)
+Sat 08 Jan 2022 06:25:14 AM UTC | boincserver | Host location: none
+Sat 08 Jan 2022 06:25:14 AM UTC | boincserver | General prefs: using your defaults
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Reading preferences override file
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Preferences:
+Sat 08 Jan 2022 06:25:14 AM UTC |  | max memory usage when active: 2973.04 MB
+Sat 08 Jan 2022 06:25:14 AM UTC |  | max memory usage when idle: 5351.48 MB
+Sat 08 Jan 2022 06:25:14 AM UTC |  | max disk usage: 8.00 GB
+Sat 08 Jan 2022 06:25:14 AM UTC |  | suspend work if non-BOINC CPU load exceeds 80%
+Sat 08 Jan 2022 06:25:14 AM UTC |  | (to change preferences, visit a project web site or select Preferences in the Manager)
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Setting up project and slot directories
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Checking active tasks
+Sat 08 Jan 2022 06:25:14 AM UTC | boincserver | URL http://51.250.12.147/boincserver/; Computer ID 3; resource share 100
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Setting up GUI RPC socket
+Sat 08 Jan 2022 06:25:14 AM UTC |  | gui_rpc_auth.cfg is empty - no GUI RPC password protection
+Sat 08 Jan 2022 06:25:14 AM UTC |  | Checking presence of 0 project files
+Sat 08 Jan 2022 06:25:15 AM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 06:25:15 AM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 06:25:17 AM UTC | boincserver | Scheduler request failed: Couldn't connect to server
+Sat 08 Jan 2022 06:25:41 AM UTC |  | Project communication failed: attempting access to reference site
+Sat 08 Jan 2022 06:25:43 AM UTC |  | Internet access OK - project servers may be temporarily down.
+Sat 08 Jan 2022 08:50:15 AM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 08:50:15 AM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 08:50:17 AM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 08:50:17 AM UTC | boincserver | This project is using an old URL.  When convenient, remove the project, then add http://127.0.0.1/boincserver/
+Sat 08 Jan 2022 08:50:17 AM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 08:50:17 AM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 08:56:29 AM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 08:56:29 AM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 08:56:31 AM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 08:56:31 AM UTC | boincserver | This project is using an old URL.  When convenient, remove the project, then add http://127.0.0.1/boincserver/
+Sat 08 Jan 2022 08:56:31 AM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 08:56:31 AM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 09:14:47 AM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 09:14:47 AM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 09:14:49 AM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 09:14:49 AM UTC | boincserver | This project is using an old URL.  When convenient, remove the project, then add http://127.0.0.1/boincserver/
+Sat 08 Jan 2022 09:14:49 AM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 09:14:49 AM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 09:52:12 AM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 09:52:12 AM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 09:52:14 AM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 09:52:14 AM UTC | boincserver | This project is using an old URL.  When convenient, remove the project, then add http://127.0.0.1/boincserver/
+Sat 08 Jan 2022 09:52:14 AM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 09:52:14 AM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 10:46:42 AM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 10:46:42 AM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 10:46:44 AM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 10:46:44 AM UTC | boincserver | This project is using an old URL.  When convenient, remove the project, then add http://127.0.0.1/boincserver/
+Sat 08 Jan 2022 10:46:44 AM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 10:46:44 AM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 12:40:32 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 12:40:32 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 12:40:34 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 12:40:34 PM UTC | boincserver | This project is using an old URL.  When convenient, remove the project, then add http://127.0.0.1/boincserver/
+Sat 08 Jan 2022 12:40:34 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 12:40:34 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:20:52 PM UTC | boincserver | Resetting project
+Sat 08 Jan 2022 03:20:52 PM UTC | boincserver | Detaching from project
+Sat 08 Jan 2022 03:21:55 PM UTC |  | Fetching configuration file from http://www.boincserver.com/boincserver/get_project_config.php
+Sat 08 Jan 2022 03:22:33 PM UTC | boincserver | Fetching scheduler list
+Sat 08 Jan 2022 03:22:35 PM UTC | boincserver | Master file download succeeded
+Sat 08 Jan 2022 03:22:40 PM UTC | boincserver | Sending scheduler request: Project initialization.
+Sat 08 Jan 2022 03:22:40 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:22:42 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:22:42 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:22:42 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:22:52 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 03:22:52 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:22:54 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:22:54 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:22:54 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:24:08 PM UTC | boincserver | update requested by user
+Sat 08 Jan 2022 03:24:09 PM UTC | boincserver | Sending scheduler request: Requested by user.
+Sat 08 Jan 2022 03:24:09 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:24:11 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:24:11 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:24:11 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:24:21 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 03:24:21 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:24:22 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:24:22 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:24:22 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:25:17 PM UTC | boincserver | update requested by user
+Sat 08 Jan 2022 03:25:18 PM UTC | boincserver | Sending scheduler request: Requested by user.
+Sat 08 Jan 2022 03:25:18 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:25:19 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:25:19 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:25:19 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:25:29 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 03:25:29 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:25:31 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:25:31 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:25:31 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:27:14 PM UTC | boincserver | update requested by user
+Sat 08 Jan 2022 03:27:16 PM UTC | boincserver | Sending scheduler request: Requested by user.
+Sat 08 Jan 2022 03:27:16 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:27:17 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:27:17 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:27:17 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:27:27 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 03:27:27 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:27:28 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:27:28 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:27:28 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:29:56 PM UTC | boincserver | Resetting project
+Sat 08 Jan 2022 03:29:56 PM UTC | boincserver | Detaching from project
+Sat 08 Jan 2022 03:30:36 PM UTC |  | Fetching configuration file from http://www.boincserver.com/boincserver/get_project_config.php
+Sat 08 Jan 2022 03:30:54 PM UTC | boincserver | Fetching scheduler list
+Sat 08 Jan 2022 03:30:56 PM UTC | boincserver | Master file download succeeded
+Sat 08 Jan 2022 03:31:01 PM UTC | boincserver | Sending scheduler request: Project initialization.
+Sat 08 Jan 2022 03:31:01 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:31:02 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:31:02 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:31:02 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:31:12 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 03:31:12 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:31:13 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:31:13 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:31:13 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:31:28 PM UTC | boincserver | update requested by user
+Sat 08 Jan 2022 03:31:33 PM UTC | boincserver | Sending scheduler request: Requested by user.
+Sat 08 Jan 2022 03:31:33 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:31:34 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:31:34 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:31:34 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:31:44 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 03:31:44 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:31:45 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:31:45 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:31:45 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:32:03 PM UTC | boincserver | update requested by user
+Sat 08 Jan 2022 03:32:05 PM UTC | boincserver | Sending scheduler request: Requested by user.
+Sat 08 Jan 2022 03:32:05 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:32:06 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:32:06 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:32:06 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:32:16 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 03:32:16 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:32:17 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:32:17 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:32:17 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:32:24 PM UTC | boincserver | update requested by user
+Sat 08 Jan 2022 03:32:27 PM UTC | boincserver | Sending scheduler request: Requested by user.
+Sat 08 Jan 2022 03:32:27 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:32:28 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:32:28 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:32:28 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:32:38 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 03:32:38 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:32:39 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:32:39 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:32:39 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:32:53 PM UTC | boincserver | update requested by user
+Sat 08 Jan 2022 03:32:54 PM UTC | boincserver | Sending scheduler request: Requested by user.
+Sat 08 Jan 2022 03:32:54 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:32:56 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:32:56 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:32:56 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:33:06 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 03:33:06 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:33:07 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:33:07 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:33:07 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:33:32 PM UTC | boincserver | update requested by user
+Sat 08 Jan 2022 03:33:32 PM UTC | boincserver | Sending scheduler request: Requested by user.
+Sat 08 Jan 2022 03:33:32 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:33:33 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:33:33 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:33:33 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:33:43 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 03:33:43 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:33:44 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:33:44 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:33:44 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:39:42 PM UTC | boincserver | Resetting project
+Sat 08 Jan 2022 03:39:42 PM UTC | boincserver | Detaching from project
+Sat 08 Jan 2022 03:40:24 PM UTC |  | Fetching configuration file from http://boincserver.com/boincserver/get_project_config.php
+Sat 08 Jan 2022 03:40:24 PM UTC |  | Project communication failed: attempting access to reference site
+Sat 08 Jan 2022 03:40:25 PM UTC |  | Internet access OK - project servers may be temporarily down.
+Sat 08 Jan 2022 03:40:39 PM UTC |  | Fetching configuration file from http://boincserver.com/boincserver/get_project_config.php
+Sat 08 Jan 2022 03:40:39 PM UTC |  | Project communication failed: attempting access to reference site
+Sat 08 Jan 2022 03:40:40 PM UTC |  | Internet access OK - project servers may be temporarily down.
+Sat 08 Jan 2022 03:41:21 PM UTC |  | Fetching configuration file from http://www.boincserver.com/boincserver/get_project_config.php
+Sat 08 Jan 2022 03:41:36 PM UTC | boincserver | Fetching scheduler list
+Sat 08 Jan 2022 03:41:37 PM UTC | boincserver | Master file download succeeded
+Sat 08 Jan 2022 03:41:42 PM UTC | boincserver | Sending scheduler request: Project initialization.
+Sat 08 Jan 2022 03:41:42 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:41:43 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:41:43 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:41:43 PM UTC | boincserver | Project requested delay of 7 seconds
+Sat 08 Jan 2022 03:41:53 PM UTC | boincserver | Sending scheduler request: To fetch work.
+Sat 08 Jan 2022 03:41:53 PM UTC | boincserver | Requesting new tasks for CPU
+Sat 08 Jan 2022 03:41:54 PM UTC | boincserver | Scheduler request completed: got 0 new tasks
+Sat 08 Jan 2022 03:41:54 PM UTC | boincserver | No tasks sent
+Sat 08 Jan 2022 03:41:54 PM UTC | boincserver | Project requested delay of 7 seconds
