@@ -63,3 +63,5 @@ metrics=['accuracy']
 model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
 
 print(model.summary())
+
+model.save_weights('weights.h5') # Сохранение весов в файл

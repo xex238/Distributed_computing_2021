@@ -2,6 +2,7 @@ import asyncio
 import websockets
 import random
 
+from keras.models import load_model
 from keras.datasets import cifar10
 
 main_port = 8771  # Порт для подключения клиентов
@@ -21,6 +22,9 @@ class Server:
         optimizer = 'adam'
         metrics = ['accuracy']
 
+    def load_weights(self):
+        model.load_weights('weights.h5')  # Загрузка весов в модель из файла
+
     # Метод для выдачи задания клиенту
     def get_task(self):
         # Получить случайным образом изображения для обучения для хоста
@@ -33,6 +37,8 @@ class Server:
         message = 'weights:\n' + self.weights + '\n'
         message += 'rand_images:\n' + rand_images + '\n'
         message += 'count_of_epochs:\n' + self.epochs_per_person
+
+        return message
 
     def change_global_weights(self, delta_weights):
         for i1 in range(len(self.weights)):
