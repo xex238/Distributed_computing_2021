@@ -478,13 +478,11 @@ class Client:
             await websocket.send(self.GET_TASK_MESSAGE) # Отправляем запрос о "задании" на сервер
 
             message = await websocket.recv()
-            print(message)
 
             if(message != 'NEURAL_NETWORK_ALREADY_TRAINED'):
                 # Приём значения ID клиента
-                ID_str = await websocket.recv()
-                self.ID = int(ID_str)
-                self.log_name = 'client_log' + ID_str + '.txt'
+                self.ID = int(message)
+                self.log_name = 'client_log' + message + '.txt'
                 self.log = open(self.log_name, 'w')
 
                 await self.get_weights(websocket)
@@ -534,7 +532,6 @@ class Client:
 my_client = Client()
 # my_client.change_data()
 
-# asyncio.get_event_loop().run_until_complete(my_client.hello())
 asyncio.get_event_loop().run_until_complete(my_client.data_request())
 my_client.learning()
 asyncio.get_event_loop().run_until_complete(my_client.send_result())

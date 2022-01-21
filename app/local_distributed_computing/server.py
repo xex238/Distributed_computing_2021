@@ -590,7 +590,6 @@ class Server:
                 await(websocket.send(client_ID_str))
 
                 # Отправка весов
-                await(websocket.send('SEND WEIGHTS'))
                 await self.send_weights(websocket)
 
                 # Отправка ссылок на изображения и количества эпох обучения
