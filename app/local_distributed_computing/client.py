@@ -335,7 +335,7 @@ class Client:
                     weights2.append(np.array(weights3))
                 weights1.append(np.array(weights2))
             weights0.append(np.array(weights1))
-        weights.append(weights0)
+        weights.append(np.array(weights0))
 
         weights0 = []
         for i1 in range(5):
@@ -344,7 +344,7 @@ class Client:
                 print(i1 + 1, ', ', i2)
                 weights1.append(float(await websocket.recv()))
             weights0.append(np.array(weights1))
-        weights.append(weights0)
+        weights.append(np.array(weights0))
 
         weights0 = []
         for i2 in range(3):
@@ -359,7 +359,7 @@ class Client:
                     weights2.append(np.array(weights3))
                 weights1.append(np.array(weights2))
             weights0.append(np.array(weights1))
-        weights.append(weights0)
+        weights.append(np.array(weights0))
 
         weights0 = []
         for i1 in range(5):
@@ -368,7 +368,7 @@ class Client:
                 print(i1 + 7, ', ', i2)
                 weights1.append(float(await websocket.recv()))
             weights0.append(np.array(weights1))
-        weights.append(weights0)
+        weights.append(np.array(weights0))
 
         weights0 = []
         for i2 in range(16384):
@@ -377,7 +377,7 @@ class Client:
                 print(12, ', ', i2, ', ', i3)
                 weights1.append(float(await websocket.recv()))
             weights0.append(np.array(weights1))
-        weights.append(weights0)
+        weights.append(np.array(weights0))
 
         weights0 = []
         for i1 in range(5):
@@ -386,7 +386,7 @@ class Client:
                 print(i1 + 13, ', ', i2)
                 weights1.append(float(await websocket.recv()))
             weights0.append(np.array(weights1))
-        weights.append(weights0)
+        weights.append(np.array(weights0))
 
         weights0 = []
         for i2 in range(256):
@@ -395,7 +395,7 @@ class Client:
                 print(18, ', ', i2, ', ', i3)
                 weights1.append(float(await websocket.recv()))
             weights0.append(np.array(weights1))
-        weights.append(weights0)
+        weights.append(np.array(weights0))
 
         weights0 = []
         for i1 in range(5):
@@ -404,7 +404,7 @@ class Client:
                 print(i1 + 19, ', ', i2)
                 weights1.append(float(await websocket.recv()))
             weights0.append(np.array(weights1))
-        weights.append(weights0)
+        weights.append(np.array(weights0))
 
         weights0 = []
         for i2 in range(128):
@@ -413,13 +413,13 @@ class Client:
                 print(24, ', ', i2, ', ', i3)
                 weights1.append(float(await websocket.recv()))
             weights0.append(np.array(weights1))
-        weights.append(weights0)
+        weights.append(np.array(weights0))
 
         weights0 = []
         for i2 in range(10):
             print(25, ', ', i2)
             weights0.append(float(await websocket.recv()))
-        weights.append(weights0)
+        weights.append(np.array(weights0))
 
         self.start_weights = weights
 
@@ -533,5 +533,7 @@ my_client = Client()
 # my_client.change_data()
 
 asyncio.get_event_loop().run_until_complete(my_client.data_request())
+my_client.print_weights_metadata()
+exit(0)
 my_client.learning()
 asyncio.get_event_loop().run_until_complete(my_client.send_result())
