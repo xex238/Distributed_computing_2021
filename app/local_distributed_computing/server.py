@@ -15,10 +15,13 @@ import random
 import json
 import os.path
 
-main_port = 8771  # Порт для подключения клиентов
-
 class Server:
     def __init__(self):
+        self.ip_address = 'localhost'  # ip адрес для открытия вебсокета
+        self.port = 8771  # Порт для подключения клиентов
+
+        self.client_ID = 1 # ID, которое выдаётся клиенту
+
         self.train_images = 50000  # Количество изображений для обучения
         self.total_received_tasks = 0 # Общее количество полученных результатов от клиента
         self.count_of_epochs = 3  # Общее количество эпох обучения
@@ -26,8 +29,9 @@ class Server:
         self.part_of_images = 0.01  # Доля изображений для хоста для обучение нейронной сети (изображения генерируются
         # случайным образом)
 
-        self.weights_filename1 = 'weights.h5'
-        self.weights_filename2 = 'weights.txt'
+        self.weights_filename_h5 = 'weights.h5' # Файл для хранения начальных значений весов в формате h5
+        self.weights_filename_txt = 'weights.txt' # Файл для хранения весов в txt формате
+        self.weights_result_filename_h5 = 'weights_result.h5' # Файл для хранения весов после обучения в формате h5
         self.weights = None  # Глобальные значения весов модели
 
         self.model = None # Модель для тестирования нейронной сети
@@ -52,6 +56,10 @@ class Server:
     def change_data(self):
         answer = input('Изменить значения по умолчанию? (y|n) ')
         if(answer == 'y'):
+            message = 'Введите ip-адрес, на котором будем открывать websocket соединение: '
+            self.ip_address = (input(message))
+            message = 'Введите номер порта, на котором будем открывать websocket соединение: '
+            self.port = int(input(message))
             message = 'Введите общее количество эпох обучения (по умолчанию ' + str(self.count_of_epochs) + ') '
             self.count_of_epochs = int(input(message))
             message = 'Введите количество эпох обучения для одного клиента (по умолчанию ' + str(self.epochs_per_person) + ') '
@@ -116,10 +124,10 @@ class Server:
 
         self.model.fit(self.X_train, self.y_train, epochs=1, verbose=1)
 
-        self.model.save_weights(self.weights_filename1)
+        self.model.save_weights(self.weights_filename_h5)
         self.weights = self.model.get_weights()
 
-        message1 = 'Начальные значения весов сохранены в файле ' + self.weights_filename1
+        message1 = 'Начальные значения весов сохранены в файле ' + self.weights_filename_h5
 
         print('Модель создана и пройдено тестовое обучение')
         print(message1)
@@ -186,32 +194,10 @@ class Server:
 
         self.model.compile(loss=self.loss, optimizer=self.optimizer, metrics=self.metrics)
 
-        self.model.load_weights(self.weights_filename1)
+        self.model.load_weights(self.weights_filename_h5)
         self.weights = self.model.get_weights()
 
-        '''
-        for i in range(len(self.weights)):
-            print('i: ', i)
-            print('np.shape(self.weights[', i, ']: ', np.shape(self.weights[i]))
-
-        print('type(self.weights): ', type(self.weights))
-        print('type(self.weights[0]): ', type(self.weights[0]))
-        print('type(self.weights[0][0]): ', type(self.weights[0][0]))
-        print('type(self.weights[0][0][0]): ', type(self.weights[0][0][0]))
-        print('type(self.weights[0][0][0][0]): ', type(self.weights[0][0][0][0]))
-
-        weights_test = np.array(self.weights)
-
-        print('type(weights_test): ', type(weights_test))
-        print('type(weights_test[0]): ', type(weights_test[0]))
-        print('type(weights_test[0][0]): ', type(weights_test[0][0]))
-        print('type(weights_test[0][0][0]): ', type(weights_test[0][0][0]))
-        print('type(weights_test[0][0][0][0]): ', type(weights_test[0][0][0][0]))
-
-        exit(0)
-        '''
-
-        message1 = 'Начальные значения загружены из файла ' + self.weights_filename1
+        message1 = 'Начальные значения загружены из файла ' + self.weights_filename_h5
 
         print('Модель создана и веса загружены')
         print(message1)
@@ -222,21 +208,6 @@ class Server:
         self.log.writelines(message1)
         self.log.writelines('Сервер запущен')
         self.log.writelines('\n')
-
-    # Метод для выдачи задания клиенту
-    def get_task(self):
-        # Получить случайным образом изображения для обучения для хоста
-        rand_images = []
-        l = list(range(1, 50001))
-        random.shuffle(l)
-        for i in range(round(self.part_of_images * self.train_images)):
-            rand_images.append(l[i])
-
-        message = 'weights:\n' + self.weights + '\n'
-        message += 'rand_images:\n' + rand_images + '\n'
-        message += 'count_of_epochs:\n' + self.epochs_per_person
-
-        return message
 
     # Метод для изменения глобального значения весов
     def change_global_weights(self, delta_weights):
@@ -328,20 +299,36 @@ class Server:
 
     # Тестирование обученной нейронной сети на тестовых данных
     def test_nn(self):
-        self.model.set_weights(self.weights)
-        # self.model.compile(loss=self.loss, optimizer=self.optimizer, metrics=self.metrics)
-        y_predict = self.model.predict(x=self.X_test)
+        self.model.set_weights(self.weights) # Загрузка глобальных значений весов в модель
+        y_predict = self.model.predict(x=self.X_test) # Прогнозирование
 
-        print('y: ', self.y_test)
-        print('y_predict: ', y_predict)
+        # Вывод полученных и действительных значений в консоль и в log файл
+        message1 = 'y: ' + str(self.y_test)
+        message2 = 'y_predict: ' + str(y_predict)
+        print(message1)
+        print(message2)
+        print()
+        self.log.writelines(message1)
+        self.log.writelines(message2)
+        self.log.writelines('\n')
 
+        # Расчёт метрик
         accuracy = accuracy_score(self.y_test, y_predict)
         precision = precision_score(self.y_test, y_predict)
         recall = recall_score(self.y_test, y_predict)
 
-        print('accuracy: ', accuracy)
-        print('precision: ', precision)
-        print('recall: ', recall)
+        # Вывод полученных метрик в консоль и в log файл
+        message1 = 'accuracy: ' + str(accuracy)
+        message2 = 'precision: ' + str(precision)
+        message3 = 'recall: ' + str(recall)
+        print(message1)
+        print(message2)
+        print(message3)
+        print()
+        self.log.writelines(message1)
+        self.log.writelines(message2)
+        self.log.writelines(message3)
+        self.log.writelines('\n')
 
     # Метод для отправки весов
     async def send_weights(self, websocket):
@@ -575,9 +562,9 @@ class Server:
 
     # websocket метод для прослушивания заданного порта и реакции на запросы
     async def data_exchange(self, websocket):
-        self.print_weights_metadata()
+        self.print_weights_metadata() # Вывод на экран метаданных о переменной weights (типы данных списка)
 
-        message = await websocket.recv()
+        message = await websocket.recv() # Приём первоначального блока данных
         print(message)
         print()
         self.log.writelines(message)
@@ -597,6 +584,10 @@ class Server:
                 # Преобразование отправляемых данных
                 rand_images_str = str(rand_images)
                 epochs_per_person_str = str(self.epochs_per_person)
+                client_ID_str = str(self.client_ID)
+
+                # Отправить ID клиента
+                await(websocket.send(client_ID_str))
 
                 # Отправка весов
                 await(websocket.send('SEND WEIGHTS'))
@@ -608,60 +599,69 @@ class Server:
 
                 print('Данные успешно отправлены')
                 print()
-
                 self.log.writelines('Данные успешно отправлены')
                 self.log.writelines('\n')
 
-                self.count_of_epochs = self.count_of_epochs - self.epochs_per_person
+                self.client_ID = self.client_ID + 1
+                self.count_of_epochs = self.count_of_epochs - self.epochs_per_person # Уменьшение общего количества эпох обучения после выдачи "задания"
             else:
                 await websocket.send('NEURAL_NETWORK_ALREADY_TRAINED')
         elif(message == 'SEND RESULT'): # Если клиент отправил выполненное "задание"
+            # Принимаем новые значения весов от клиента
             delta_weights = self.get_weights(websocket)
 
-            self.change_global_weights(delta_weights)
-            self.total_received_tasks = self.total_received_tasks + 1
+            self.change_global_weights(delta_weights) # Изменение глобальных значений весов
+            self.total_received_tasks = self.total_received_tasks + 1 # Учёт количества клиентов, отправивших обновлённые значения весов
 
             print('Веса от клиента успешно приняты')
 
-            if(self.total_received_tasks * self.epochs_per_person == self.count_of_epochs):
+            if(self.total_received_tasks * self.epochs_per_person == self.count_of_epochs): # Если все задания уже выполнены
                 print('Распределённое обучение нейронной сети завершено')
                 print('Выполняется проверка нейронной сети на тестовых данных')
                 print()
-
                 self.log.writelines('Распределённое обучение нейронной сети завершено')
                 self.log.writelines('Выполняется проверка нейронной сети на тестовых данных')
                 self.log.writelines('\n')
 
-                self.test_nn()
+                self.test_nn() # Тестирование нейронной сети (проверка нейронной сети на тестовых данных)
 
-                self.log.close()
-                exit(0)
+                self.model.save_weights(
+                    self.weights_result_filename_h5)  # Сохранение окончательных значений весов в файл
+
+                message1 = 'Окончательные значения весов сохранены в файле ' + self.weights_result_filename_h5
+                print(message1)
+                print()
+                self.log.writelines(message1)
+                self.log.writelines('\n')
+
+                self.log.close() # Закрытие log файла
+                exit(0) # Выход из программы
             else:
                 message1 = 'Метрики нейронной сети после ' + str(self.total_received_tasks) + '-ого клиента'
                 message2 = 'Количество пройденных эпох обучения: ' + str(self.total_received_tasks * self.epochs_per_person)
-
                 print(message1)
                 print(message2)
                 print()
-
                 self.log.writelines(message1)
                 self.log.writelines(message2)
                 self.log.writelines('\n')
 
-                self.test_nn()
+                self.test_nn() # Тестирование нейронной сети (проверка нейронной сети на тестовых данных)
 
+# Создание экземпляра класса Server и задание основных входных данных
 my_server = Server()
-my_server.change_data()
+# my_server.change_data()
 
 # Если файл с весами существует, то загрузить его, иначе пройти тестовое обучение
-check_file = os.path.exists(my_server.weights_filename1)
+check_file = os.path.exists(my_server.weights_filename_h5)
 if(check_file):
     my_server.load_base_weights()
 else:
     my_server.get_base_weights()
 
+# Запуск сервера
 try:
-    main_server = websockets.serve(my_server.data_exchange, "localhost", main_port)
+    main_server = websockets.serve(my_server.data_exchange, my_server.ip_address, my_server.port)
     asyncio.get_event_loop().run_until_complete(main_server)
     asyncio.get_event_loop().run_forever()
 except Exception:

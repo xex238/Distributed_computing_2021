@@ -13,7 +13,10 @@ import ast
 
 class Client:
     def __init__(self):
-        self.main_port = 8771 # Порт сервера для подключения
+        self.ip_address = 'localhost' # ip адрес сервера
+        self.port = 8771 # Порт сервера для подключения
+        self.ID = 1 # ID клиента (выдаётся сервером)
+
         self.GET_TASK_MESSAGE = 'GET TASK' # Сообщение для запроса "задания"
         self.SEND_RESULT_MESSAGE = 'SEND RESULT' # Сообщение для отправки результата после обучения нейронной сети
         self.NEURAL_NETWORK_ALREADY_TRAINED = 'NEURAL_NETWORK_ALREADY_TRAINED' # Нейронная сеть уже обучена
@@ -36,6 +39,18 @@ class Client:
 
         self.class_num = None
 
+        self.log_name = 'client_log.txt' # Имя файла для логов
+        self.log = None # Файл с логами
+
+    # Изменить некоторые начальные значения
+    def change_data(self):
+        answer = input('Изменить значения по умолчанию? (y|n) ')
+        if(answer == 'y'):
+            message = 'Введите ip-адрес, на котором будем открывать websocket соединение: '
+            self.ip_address = (input(message))
+            message = 'Введите номер порта, на котором будем открывать websocket соединение: '
+            self.port = int(input(message))
+
     # Загрузка датасета cifar-10 и подготовка данных
     def data_preparing(self):
         # loading in the data
@@ -57,6 +72,7 @@ class Client:
     # Метод для создания модели нейронной сети
     def create_model(self):
         print('Идёт создание модели нейронной сети...')
+        self.log.writelines('Идёт создание модели нейронной сети...')
 
         self.model = Sequential()
 
@@ -90,22 +106,35 @@ class Client:
         self.model.add(Activation('softmax'))
 
         print('Модель нейронной сети успешно создана')
+        print()
+        self.log.writelines('Модель нейронной сети успешно создана')
+        self.log.writelines('\n')
 
     # Метод для запуска обучения нейронной сети
     def learning(self):
         self.create_model()
 
         print('Загрузка полученных от сервера весов в модель нейронной сети...')
+        self.log.writelines('Загрузка полученных от сервера весов в модель нейронной сети...')
         self.model.set_weights(self.start_weights) # Могут быть проблемы при преобразовании весов!!!
         print('Веса успешно загружены в модель нейронной сети')
+        print()
+        self.log.writelines('Веса успешно загружены в модель нейронной сети')
+        self.log.writelines('\n')
+
         self.model.compile(loss=self.loss, optimizer=self.optimizer, metrics=self.metrics)
 
-        #print(self.model.summary())
+        print('model.summary:')
+        print(self.model.summary())
 
         # Обучение
         print('Идёт обучение нейронной сети...')
+        self.log.writelines('Идёт обучение нейронной сети...')
         history = self.model.fit(self.X_train, self.y_train, epochs=self.total_epochs, verbose=1)
         print('Обучение нейронной сети успешно завершено')
+        print()
+        self.log.writelines('Обучение нейронной сети успешно завершено')
+        self.log.writelines('\n')
 
         self.end_weights = self.model.get_weights()
         self.compute_delta_weights()
@@ -113,6 +142,7 @@ class Client:
     # Расчитать значения изменения весов нейронной сети
     def compute_delta_weights(self):
         print('Выполняется расчёт градиентов (изменений весов нейронной сети)')
+        self.log.writelines('Выполняется расчёт градиентов (изменений весов нейронной сети)')
 
         for i2 in range(len(self.weights[0])):
             for i3 in range(len(self.weights[0][i2])):
@@ -197,10 +227,13 @@ class Client:
             self.delta_weights[25][i2] = self.end_weights[25][i2] - self.start_weights[25][i2]
 
         print('Расчёт градиентов (изменений весов нейронной сети) успешно выполнен')
+        print()
+        self.log.writelines('Расчёт градиентов (изменений весов нейронной сети) успешно выполнен')
+        self.log.writelines('\n')
 
     # Тестовый метод для проверки соединения по протоколу websocket
     async def hello(self):
-        uri = "ws://localhost:" + str(self.main_port)
+        uri = "ws://localhost:" + str(self.port)
         async with websockets.connect(uri) as websocket:
             await websocket.send('Hello world!')
 
@@ -286,6 +319,7 @@ class Client:
     # Метод для приёма весов
     async def get_weights(self, websocket):
         print('Загрузка весов с сервера')
+        self.log.writelines('Загрузка весов с сервера')
         weights = []
 
         weights0 = []
@@ -390,6 +424,7 @@ class Client:
         self.start_weights = weights
 
         print('Веса успешно загружены')
+        self.log.writelines('Веса успешно загружены')
 
     # Метод для вывода метаданных о весах
     def print_weights_metadata(self):
@@ -438,7 +473,7 @@ class Client:
     async def data_request(self):
         print('Обращение к сервверу за данными')
 
-        uri = "ws://localhost:" + str(self.main_port)
+        uri = "ws://" + self.ip_address + ":" + str(self.port)
         async with websockets.connect(uri) as websocket:
             await websocket.send(self.GET_TASK_MESSAGE) # Отправляем запрос о "задании" на сервер
 
@@ -446,12 +481,19 @@ class Client:
             print(message)
 
             if(message != 'NEURAL_NETWORK_ALREADY_TRAINED'):
+                # Приём значения ID клиента
+                ID_str = await websocket.recv()
+                self.ID = int(ID_str)
+                self.log_name = 'client_log' + ID_str + '.txt'
+                self.log = open(self.log_name, 'w')
+
                 await self.get_weights(websocket)
 
                 images_str = await websocket.recv() # Получение списка с изображениями для обучения
                 total_epochs_str = await websocket.recv() # Получение значения количества эпох для обучения
 
                 print('Данные от сервера успешно получены')
+                self.log.writelines('Данные от сервера успешно получены')
 
                 np.set_printoptions(threshold=100000)
 
@@ -471,17 +513,26 @@ class Client:
                 # print(self.start_weights)
 
                 print('Данные успешно конвертированы')
+                print()
+                self.log.writelines('Данные успешно конвертированы')
+                self.log.writelines('\n')
 
     # Метод для отправки результата (изменение весов при обучении, delta)
     async def send_result(self):
         print('Отправка результатов (градиентов) на сервер')
+        self.log.writelines('Отправка результатов (градиентов) на сервер')
 
-        uri = "ws://localhost:" + str(self.main_port)
+        uri = "ws://" + self.ip_address + ":" + str(self.port)
         async with websockets.connect(uri) as websocket:
             await websocket.send(self.SEND_RESULT_MESSAGE) # Отправляем сообщение об отправлке результатов на сервер
             await self.send_weights(websocket)
 
+        print('Данные успешно отправлены на сервер')
+        self.log.writelines('Данные успешно отправлены на сервер')
+        self.log.close()
+
 my_client = Client()
+# my_client.change_data()
 
 # asyncio.get_event_loop().run_until_complete(my_client.hello())
 asyncio.get_event_loop().run_until_complete(my_client.data_request())
