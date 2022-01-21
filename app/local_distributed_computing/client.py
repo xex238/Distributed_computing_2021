@@ -144,27 +144,27 @@ class Client:
         print('Выполняется расчёт градиентов (изменений весов нейронной сети)')
         self.log.writelines('Выполняется расчёт градиентов (изменений весов нейронной сети)')
 
-        for i2 in range(len(self.weights[0])):
-            for i3 in range(len(self.weights[0][i2])):
-                for i4 in range(len(self.weights[0][i2][i3])):
-                    for i5 in range(len(self.weights[0][i2][i3][i4])):
+        for i2 in range(len(self.start_weights[0])):
+            for i3 in range(len(self.start_weights[0][i2])):
+                for i4 in range(len(self.start_weights[0][i2][i3])):
+                    for i5 in range(len(self.start_weights[0][i2][i3][i4])):
                         # print(0, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
                         # print(self.weights[0][i2][i3][i4][i5])
                         # print()
                         self.delta_weights[0][i2][i3][i4][i5] = self.end_weights[0][i2][i3][i4][i5] - self.start_weights[0][i2][i3][i4][i5]
 
         for i1 in range(5):
-            for i2 in range(len(self.weights[i1 + 1])):
+            for i2 in range(len(self.start_weights[i1 + 1])):
                 # print(i1 + 1, ', ', i2)
                 # print(self.weights[i1 + 1][i2])
                 # print()
                 # await websocket.send(str(self.weights[i1 + 1][i2]))
                 self.delta_weights[i1 + 1][i2] = self.end_weights[i1 + 1][i2] - self.start_weights[i1 + 1][i2]
 
-        for i2 in range(len(self.weights[6])):
-            for i3 in range(len(self.weights[6][i2])):
-                for i4 in range(len(self.weights[6][i2][i3])):
-                    for i5 in range(len(self.weights[6][i2][i3][i4])):
+        for i2 in range(len(self.start_weights[6])):
+            for i3 in range(len(self.start_weights[6][i2])):
+                for i4 in range(len(self.start_weights[6][i2][i3])):
+                    for i5 in range(len(self.start_weights[6][i2][i3][i4])):
                         # print(6, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
                         # print(self.weights[6][i2][i3][i4][i5])
                         # print()
@@ -172,15 +172,15 @@ class Client:
                         self.delta_weights[6][i2][i3][i4][i5] = self.end_weights[6][i2][i3][i4][i5] - self.start_weights[6][i2][i3][i4][i5]
 
         for i1 in range(5):
-            for i2 in range(len(self.weights[i1 + 7])):
+            for i2 in range(len(self.start_weights[i1 + 7])):
                 # print(i1 + 7, ', ', i2)
                 # print(self.weights[i1 + 7][i2])
                 # print()
                 # await websocket.send(str(self.weights[i1 + 7][i2]))
                 self.delta_weights[i1 + 7][i2] = self.end_weights[i1 + 7][i2] - self.start_weights[i1 + 7][i2]
 
-        for i2 in range(len(self.weights[12])):
-            for i3 in range(len(self.weights[12][i2])):
+        for i2 in range(len(self.start_weights[12])):
+            for i3 in range(len(self.start_weights[12][i2])):
                 # print(12, ', ', i2, ', ', i3)
                 # print(self.weights[12][i2][i3])
                 # print()
@@ -188,15 +188,15 @@ class Client:
                 self.delta_weights[12][i2][i3] = self.end_weights[12][i2][i3] - self.start_weights[12][i2][i3]
 
         for i1 in range(5):
-            for i2 in range(len(self.weights[i1 + 13])):
+            for i2 in range(len(self.start_weights[i1 + 13])):
                 # print(i1 + 13, ', ', i2)
                 # print(self.weights[i1 + 13][i2])
                 # print()
                 # await websocket.send(str(self.weights[i1 + 13][i2]))
                 self.delta_weights[i1 + 13][i2] = self.end_weights[i1 + 13][i2] - self.start_weights[i1 + 13][i2]
 
-        for i2 in range(len(self.weights[18])):
-            for i3 in range(len(self.weights[18][i2])):
+        for i2 in range(len(self.start_weights[18])):
+            for i3 in range(len(self.start_weights[18][i2])):
                 # print(18, ', ', i2, ', ', i3)
                 # print(self.weights[18][i2][i3])
                 # print()
@@ -204,22 +204,22 @@ class Client:
                 self.delta_weights[18][i2][i3] = self.end_weights[18][i2][i3] - self.start_weights[18][i2][i3]
 
         for i1 in range(5):
-            for i2 in range(len(self.weights[i1 + 19])):
+            for i2 in range(len(self.start_weights[i1 + 19])):
                 # print(i1 + 19, ', ', i2)
                 # print(self.weights[i1 + 19][i2])
                 # print()
                 # await websocket.send(str(self.weights[i1 + 19][i2]))
                 self.delta_weights[i1 + 19][i2] = self.end_weights[i1 + 19][i2] - self.start_weights[i1 + 19][i2]
 
-        for i2 in range(len(self.weights[24])):
-            for i3 in range(len(self.weights[24][i2])):
+        for i2 in range(len(self.start_weights[24])):
+            for i3 in range(len(self.start_weights[24][i2])):
                 # print(24, ', ', i2, ', ', i3)
                 # print(self.weights[24][i2][i3])
                 # print()
                 # await websocket.send(str(self.weights[24][i2][i3]))
                 self.delta_weights[24][i2][i3] = self.end_weights[24][i2][i3] - self.start_weights[24][i2][i3]
 
-        for i2 in range(len(self.weights[25])):
+        for i2 in range(len(self.start_weights[25])):
             # print(25, ', ', i2)
             # print(self.weights[25][i2])
             # print()
