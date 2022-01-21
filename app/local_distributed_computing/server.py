@@ -429,14 +429,12 @@ class Server:
             weights0.append(np.array(weights1))
         weights.append(np.array(weights0))
 
-        weights0 = []
         for i1 in range(5):
             weights1 = []
             for i2 in range(32):
                 print(i1 + 1, ', ', i2)
                 weights1.append(float(await websocket.recv()))
-            weights0.append(np.array(weights1))
-        weights.append(np.array(weights0))
+            weights.append(np.array(weights1))
 
         weights0 = []
         for i2 in range(3):
@@ -453,14 +451,12 @@ class Server:
             weights0.append(np.array(weights1))
         weights.append(np.array(weights0))
 
-        weights0 = []
         for i1 in range(5):
             weights1 = []
             for i2 in range(64):
                 print(i1 + 7, ', ', i2)
                 weights1.append(float(await websocket.recv()))
-            weights0.append(np.array(weights1))
-        weights.append(np.array(weights0))
+            weights.append(np.array(weights1))
 
         weights0 = []
         for i2 in range(16384):
@@ -471,14 +467,12 @@ class Server:
             weights0.append(np.array(weights1))
         weights.append(np.array(weights0))
 
-        weights0 = []
         for i1 in range(5):
             weights1 = []
             for i2 in range(256):
                 print(i1 + 13, ', ', i2)
                 weights1.append(float(await websocket.recv()))
-            weights0.append(np.array(weights1))
-        weights.append(np.array(weights0))
+            weights.append(np.array(weights1))
 
         weights0 = []
         for i2 in range(256):
@@ -489,14 +483,12 @@ class Server:
             weights0.append(np.array(weights1))
         weights.append(np.array(weights0))
 
-        weights0 = []
         for i1 in range(5):
             weights1 = []
             for i2 in range(128):
                 print(i1 + 19, ', ', i2)
                 weights1.append(float(await websocket.recv()))
-            weights0.append(np.array(weights1))
-        weights.append(np.array(weights0))
+            weights.append(np.array(weights1))
 
         weights0 = []
         for i2 in range(128):
