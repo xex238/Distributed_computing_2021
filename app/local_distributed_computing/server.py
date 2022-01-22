@@ -14,6 +14,8 @@ import websockets
 import random
 import json
 import os.path
+import math
+import time
 
 class Server:
     def __init__(self):
@@ -332,86 +334,89 @@ class Server:
 
     # Метод для отправки весов
     async def send_weights(self, websocket):
-        print('Идёт отправка весов')
+        start_time = time.time()
+        print('Идёт отправка весов. Завершено на 0%')
+        self.log.writelines('Идёт отправка весов. Завершено на 0%')
+        total_weights = 4250058
+        send_weights = 0
+        send_persentage = 0
 
         for i2 in range(len(self.weights[0])):
             for i3 in range(len(self.weights[0][i2])):
                 for i4 in range(len(self.weights[0][i2][i3])):
                     for i5 in range(len(self.weights[0][i2][i3][i4])):
-                        print(0, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
-                        print(self.weights[0][i2][i3][i4][i5])
-                        print()
                         await websocket.send(str(self.weights[0][i2][i3][i4][i5]))
+                        send_weights = send_weights + 1
 
         for i1 in range(5):
             for i2 in range(len(self.weights[i1 + 1])):
-                print(i1 + 1, ', ', i2)
-                print(self.weights[i1 + 1][i2])
-                print()
                 await websocket.send(str(self.weights[i1 + 1][i2]))
+                send_weights = send_weights + 1
 
         for i2 in range(len(self.weights[6])):
             for i3 in range(len(self.weights[6][i2])):
                 for i4 in range(len(self.weights[6][i2][i3])):
                     for i5 in range(len(self.weights[6][i2][i3][i4])):
-                        print(6, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
-                        print(self.weights[6][i2][i3][i4][i5])
-                        print()
                         await websocket.send(str(self.weights[6][i2][i3][i4][i5]))
+                        send_weights = send_weights + 1
 
         for i1 in range(5):
             for i2 in range(len(self.weights[i1 + 7])):
-                print(i1 + 7, ', ', i2)
-                print(self.weights[i1 + 7][i2])
-                print()
                 await websocket.send(str(self.weights[i1 + 7][i2]))
+                send_weights = send_weights + 1
 
         for i2 in range(len(self.weights[12])):
             for i3 in range(len(self.weights[12][i2])):
-                print(12, ', ', i2, ', ', i3)
-                print(self.weights[12][i2][i3])
-                print()
                 await websocket.send(str(self.weights[12][i2][i3]))
+                send_weights = send_weights + 1
+                if(send_persentage < math.floor(send_weights / total_weights * 100)):
+                    send_persentage = send_persentage + 1
+                    message = 'Идёт отправка весов клиенту. Завершено на ' + str(send_persentage) + '%'
+                    print(message)
+                    self.log.writelines(message)
 
         for i1 in range(5):
             for i2 in range(len(self.weights[i1 + 13])):
-                print(i1 + 13, ', ', i2)
-                print(self.weights[i1 + 13][i2])
-                print()
                 await websocket.send(str(self.weights[i1 + 13][i2]))
+                send_weights = send_weights + 1
 
         for i2 in range(len(self.weights[18])):
             for i3 in range(len(self.weights[18][i2])):
-                print(18, ', ', i2, ', ', i3)
-                print(self.weights[18][i2][i3])
-                print()
                 await websocket.send(str(self.weights[18][i2][i3]))
+                send_weights = send_weights + 1
 
         for i1 in range(5):
             for i2 in range(len(self.weights[i1 + 19])):
-                print(i1 + 19, ', ', i2)
-                print(self.weights[i1 + 19][i2])
-                print()
                 await websocket.send(str(self.weights[i1 + 19][i2]))
+                send_weights = send_weights + 1
 
         for i2 in range(len(self.weights[24])):
             for i3 in range(len(self.weights[24][i2])):
-                print(24, ', ', i2, ', ', i3)
-                print(self.weights[24][i2][i3])
-                print()
                 await websocket.send(str(self.weights[24][i2][i3]))
+                send_weights = send_weights + 1
 
         for i2 in range(len(self.weights[25])):
-            print(25, ', ', i2)
-            print(self.weights[25][i2])
-            print()
             await websocket.send(str(self.weights[25][i2]))
+            send_weights = send_weights + 1
+
+        end_time = time.time()
+        message = 'Время отправки весов составило ' + str(round(end_time - start_time, 2)) + ' минут'
 
         print('Веса успешно отправлены')
+        print(message)
+        print()
+        self.log.writelines('Веса успешно отправлены')
+        self.log.writelines(message)
+        self.log.writelines('\n')
 
     # Метод для приёма весов
     async def get_weights(self, websocket):
-        print('Загрузка весов от клиента...')
+        start_time = time.time()
+        print('Загрузка весов от клиента... Завершено на 0%')
+        self.log.writelines('Загрузка весов от клиента... Завершено на 0%')
+        total_weights = 4250058
+        get_weights = 0
+        get_persentage = 0
         weights = []
 
         weights0 = []
@@ -422,8 +427,8 @@ class Server:
                 for i4 in range(3):
                     weights3 = []
                     for i5 in range(32):
-                        print(0, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
                         weights3.append(float(await websocket.recv()))
+                        get_weights = get_weights + 1
                     weights2.append(np.array(weights3))
                 weights1.append(np.array(weights2))
             weights0.append(np.array(weights1))
@@ -432,8 +437,8 @@ class Server:
         for i1 in range(5):
             weights1 = []
             for i2 in range(32):
-                print(i1 + 1, ', ', i2)
                 weights1.append(float(await websocket.recv()))
+                get_weights = get_weights + 1
             weights.append(np.array(weights1))
 
         weights0 = []
@@ -444,8 +449,8 @@ class Server:
                 for i4 in range(32):
                     weights3 = []
                     for i5 in range(64):
-                        print(6, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
                         weights3.append(float(await websocket.recv()))
+                        get_weights = get_weights + 1
                     weights2.append(np.array(weights3))
                 weights1.append(np.array(weights2))
             weights0.append(np.array(weights1))
@@ -454,58 +459,71 @@ class Server:
         for i1 in range(5):
             weights1 = []
             for i2 in range(64):
-                print(i1 + 7, ', ', i2)
                 weights1.append(float(await websocket.recv()))
+                get_weights = get_weights + 1
             weights.append(np.array(weights1))
 
         weights0 = []
         for i2 in range(16384):
             weights1 = []
             for i3 in range(256):
-                print(12, ', ', i2, ', ', i3)
                 weights1.append(float(await websocket.recv()))
+                get_weights = get_weights + 1
+                if(get_persentage < math.floor(get_weights / total_weights * 100)):
+                    get_persentage = get_persentage + 1
+                    message = 'Идёт загрузка весов от клиента. Завершено на ' + str(get_persentage) + '%'
+                    print(message)
+                    self.log.writelines(message)
             weights0.append(np.array(weights1))
         weights.append(np.array(weights0))
 
         for i1 in range(5):
             weights1 = []
             for i2 in range(256):
-                print(i1 + 13, ', ', i2)
                 weights1.append(float(await websocket.recv()))
+                get_weights = get_weights + 1
             weights.append(np.array(weights1))
 
         weights0 = []
         for i2 in range(256):
             weights1 = []
             for i3 in range(128):
-                print(18, ', ', i2, ', ', i3)
                 weights1.append(float(await websocket.recv()))
+                get_weights = get_weights + 1
             weights0.append(np.array(weights1))
         weights.append(np.array(weights0))
 
         for i1 in range(5):
             weights1 = []
             for i2 in range(128):
-                print(i1 + 19, ', ', i2)
                 weights1.append(float(await websocket.recv()))
+                get_weights = get_weights + 1
             weights.append(np.array(weights1))
 
         weights0 = []
         for i2 in range(128):
             weights1 = []
             for i3 in range(10):
-                print(24, ', ', i2, ', ', i3)
                 weights1.append(float(await websocket.recv()))
+                get_weights = get_weights + 1
             weights0.append(np.array(weights1))
         weights.append(np.array(weights0))
 
         weights0 = []
         for i2 in range(10):
-            print(25, ', ', i2)
             weights0.append(float(await websocket.recv()))
+            get_weights = get_weights + 1
         weights.append(np.array(weights0))
 
+        end_time = time.time()
+        message = 'Время загрузки весов составило ' + str(round(end_time - start_time, 2)) + ' минут'
+
         print('Веса успешно загружены')
+        print(message)
+        print()
+        self.log.writelines('Веса успешно загружены')
+        self.log.writelines(message)
+        self.log.writelines('\n')
 
         return weights
 
@@ -599,7 +617,7 @@ class Server:
                 await websocket.send('NEURAL_NETWORK_ALREADY_TRAINED')
         elif(message == 'SEND RESULT'): # Если клиент отправил выполненное "задание"
             # Принимаем новые значения весов от клиента
-            delta_weights = self.get_weights(websocket)
+            delta_weights = await self.get_weights(websocket)
 
             self.change_global_weights(delta_weights) # Изменение глобальных значений весов
             self.total_received_tasks = self.total_received_tasks + 1 # Учёт количества клиентов, отправивших обновлённые значения весов
@@ -649,7 +667,7 @@ if(check_file):
     my_server.load_base_weights()
 else:
     my_server.get_base_weights()
-my_server.print_weights_metadata()
+# my_server.print_weights_metadata()
 
 # Запуск сервера
 try:
