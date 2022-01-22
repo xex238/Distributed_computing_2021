@@ -6,6 +6,8 @@ from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.constraints import maxnorm
 from keras.utils import np_utils
 from sklearn.metrics import accuracy_score, precision_score, recall_score
+from sklearn.model_selection import cross_val_score
+from sklearn.metrics import confusion_matrix
 
 from keras.datasets import cifar10
 
@@ -301,6 +303,9 @@ class Server:
 
     # Тестирование обученной нейронной сети на тестовых данных
     def test_nn(self):
+        print('Выполняется проверка нейронной сети на тестовых данных')
+        self.log.writelines('Выполняется проверка нейронной сети на тестовых данных')
+
         self.model.set_weights(self.weights) # Загрузка глобальных значений весов в модель
         y_predict = self.model.predict(x=self.X_test) # Прогнозирование
 
@@ -315,21 +320,56 @@ class Server:
         self.log.writelines('\n')
 
         # Расчёт метрик
-        accuracy = accuracy_score(self.y_test, y_predict)
-        precision = precision_score(self.y_test, y_predict)
-        recall = recall_score(self.y_test, y_predict)
+        '''
+        try:
+            accuracy = accuracy_score(self.y_test, y_predict)
+            message = 'accuracy: ' + str(accuracy)
+            print(message)
+            self.log.writelines(message)
+        except Exception:
+            print('Возникла ошибка при подсчёте метрики accuracy_score')
+            self.log.writelines('Возникла ошибка при подсчёте метрики accuracy_score')
+        '''
 
-        # Вывод полученных метрик в консоль и в log файл
-        message1 = 'accuracy: ' + str(accuracy)
-        message2 = 'precision: ' + str(precision)
-        message3 = 'recall: ' + str(recall)
-        print(message1)
-        print(message2)
-        print(message3)
+        try:
+            cvs = cross_val_score(y_predict, self.X_test, self.y_test)
+            message = 'cross_val_score: ' + str(cvs)
+            print(message)
+            self.log.writelines(message)
+        except Exception:
+            print('Возникла ошибка при подсчёте метрики cross_val_score')
+            self.log.writelines('Возникла ошибка при подсчёте метрики cross_val_score')
+
+        try:
+            precision = precision_score(self.y_test, y_predict, average=None)
+            message = 'precision_score: ' + str(precision)
+            print(message)
+            self.log.writelines(message)
+        except Exception:
+            print('Возникла ошибка при подсчёте метрики precision_score')
+            self.log.writelines('Возникла ошибка при подсчёте метрики precision_score')
+
+        try:
+            recall = recall_score(self.y_test, y_predict, average=None)
+            message = 'recall_score: ' + str(recall)
+            print(message)
+            self.log.writelines(message)
+        except Exception:
+            print('Возникла ошибка при подсчёте метрики recall_score')
+            self.log.writelines('Возникла ошибка при подсчёте метрики recall_score')
+
+        try:
+            cm = confusion_matrix(self.y_test, y_predict)
+            message = 'confusion_matrix: ' + str(cm)
+            print(message)
+            self.log.writelines(message)
+        except Exception:
+            print('Возникла ошибка при подсчёте confusion_matrix')
+            self.log.writelines('Возникла ошибка при подсчёте confusion_matrix')
+
+        print('Проверка нейронной сети на тестовых данных завершена')
         print()
-        self.log.writelines(message1)
-        self.log.writelines(message2)
-        self.log.writelines(message3)
+        self.log.writelines('Проверка нейронной сети на тестовых данных завершена')
         self.log.writelines('\n')
 
     # Метод для отправки весов
@@ -626,11 +666,7 @@ class Server:
 
             if(self.total_received_tasks * self.epochs_per_person == self.count_of_epochs): # Если все задания уже выполнены
                 print('Распределённое обучение нейронной сети завершено')
-                print('Выполняется проверка нейронной сети на тестовых данных')
-                print()
                 self.log.writelines('Распределённое обучение нейронной сети завершено')
-                self.log.writelines('Выполняется проверка нейронной сети на тестовых данных')
-                self.log.writelines('\n')
 
                 self.test_nn() # Тестирование нейронной сети (проверка нейронной сети на тестовых данных)
 
