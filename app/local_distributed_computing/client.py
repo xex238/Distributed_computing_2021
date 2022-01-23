@@ -74,7 +74,7 @@ class Client:
     # Метод для создания модели нейронной сети
     def create_model(self):
         print('Идёт создание модели нейронной сети...')
-        self.log.writelines('Идёт создание модели нейронной сети...')
+        self.log.writelines('Идёт создание модели нейронной сети...\n')
 
         self.model = Sequential()
 
@@ -109,7 +109,8 @@ class Client:
 
         print('Модель нейронной сети успешно создана')
         print()
-        self.log.writelines('Модель нейронной сети успешно создана')
+        self.log.writelines('Модель нейронной сети успешно создана\n')
+        self.log.writelines('\n')
         self.log.writelines('\n')
 
     # Метод для запуска обучения нейронной сети
@@ -117,11 +118,12 @@ class Client:
         self.create_model()
 
         print('Загрузка полученных от сервера весов в модель нейронной сети...')
-        self.log.writelines('Загрузка полученных от сервера весов в модель нейронной сети...')
-        self.model.set_weights(self.start_weights) # Могут быть проблемы при преобразовании весов!!!
+        self.log.writelines('Загрузка полученных от сервера весов в модель нейронной сети...\n')
+        self.model.set_weights(self.start_weights)
         print('Веса успешно загружены в модель нейронной сети')
         print()
-        self.log.writelines('Веса успешно загружены в модель нейронной сети')
+        self.log.writelines('Веса успешно загружены в модель нейронной сети\n')
+        self.log.writelines('\n')
         self.log.writelines('\n')
 
         self.model.compile(loss=self.loss, optimizer=self.optimizer, metrics=self.metrics)
@@ -131,11 +133,12 @@ class Client:
 
         # Обучение
         print('Идёт обучение нейронной сети...')
-        self.log.writelines('Идёт обучение нейронной сети...')
+        self.log.writelines('Идёт обучение нейронной сети...\n')
         history = self.model.fit(self.X_train, self.y_train, epochs=self.total_epochs, verbose=1)
         print('Обучение нейронной сети успешно завершено')
         print()
-        self.log.writelines('Обучение нейронной сети успешно завершено')
+        self.log.writelines('Обучение нейронной сети успешно завершено\n')
+        self.log.writelines('\n')
         self.log.writelines('\n')
 
         self.end_weights = self.model.get_weights()
@@ -143,106 +146,68 @@ class Client:
 
     # Расчитать значения изменения весов нейронной сети
     def compute_delta_weights(self):
-        print('Выполняется расчёт градиентов (изменений весов нейронной сети)')
-        self.log.writelines('Выполняется расчёт градиентов (изменений весов нейронной сети)')
+        print('Выполняется расчёт изменений весов нейронной сети (delta_weights)')
+        self.log.writelines('Выполняется расчёт изменений весов нейронной сети (delta_weights)\n')
 
         for i2 in range(len(self.start_weights[0])):
             for i3 in range(len(self.start_weights[0][i2])):
                 for i4 in range(len(self.start_weights[0][i2][i3])):
                     for i5 in range(len(self.start_weights[0][i2][i3][i4])):
-                        # print(0, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
-                        # print(self.weights[0][i2][i3][i4][i5])
-                        # print()
                         self.start_weights[0][i2][i3][i4][i5] = self.end_weights[0][i2][i3][i4][i5] - self.start_weights[0][i2][i3][i4][i5]
 
         for i1 in range(5):
             for i2 in range(len(self.start_weights[i1 + 1])):
-                # print(i1 + 1, ', ', i2)
-                # print(self.weights[i1 + 1][i2])
-                # print()
-                # await websocket.send(str(self.weights[i1 + 1][i2]))
                 self.start_weights[i1 + 1][i2] = self.end_weights[i1 + 1][i2] - self.start_weights[i1 + 1][i2]
 
         for i2 in range(len(self.start_weights[6])):
             for i3 in range(len(self.start_weights[6][i2])):
                 for i4 in range(len(self.start_weights[6][i2][i3])):
                     for i5 in range(len(self.start_weights[6][i2][i3][i4])):
-                        # print(6, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
-                        # print(self.weights[6][i2][i3][i4][i5])
-                        # print()
-                        # await websocket.send(str(self.weights[6][i2][i3][i4][i5]))
                         self.start_weights[6][i2][i3][i4][i5] = self.end_weights[6][i2][i3][i4][i5] - self.start_weights[6][i2][i3][i4][i5]
 
         for i1 in range(5):
             for i2 in range(len(self.start_weights[i1 + 7])):
-                # print(i1 + 7, ', ', i2)
-                # print(self.weights[i1 + 7][i2])
-                # print()
-                # await websocket.send(str(self.weights[i1 + 7][i2]))
                 self.start_weights[i1 + 7][i2] = self.end_weights[i1 + 7][i2] - self.start_weights[i1 + 7][i2]
 
         for i2 in range(len(self.start_weights[12])):
             for i3 in range(len(self.start_weights[12][i2])):
-                # print(12, ', ', i2, ', ', i3)
-                # print(self.weights[12][i2][i3])
-                # print()
-                # await websocket.send(str(self.weights[12][i2][i3]))
                 self.start_weights[12][i2][i3] = self.end_weights[12][i2][i3] - self.start_weights[12][i2][i3]
 
         for i1 in range(5):
             for i2 in range(len(self.start_weights[i1 + 13])):
-                # print(i1 + 13, ', ', i2)
-                # print(self.weights[i1 + 13][i2])
-                # print()
-                # await websocket.send(str(self.weights[i1 + 13][i2]))
                 self.start_weights[i1 + 13][i2] = self.end_weights[i1 + 13][i2] - self.start_weights[i1 + 13][i2]
 
         for i2 in range(len(self.start_weights[18])):
             for i3 in range(len(self.start_weights[18][i2])):
-                # print(18, ', ', i2, ', ', i3)
-                # print(self.weights[18][i2][i3])
-                # print()
-                # await websocket.send(str(self.weights[18][i2][i3]))
                 self.start_weights[18][i2][i3] = self.end_weights[18][i2][i3] - self.start_weights[18][i2][i3]
 
         for i1 in range(5):
             for i2 in range(len(self.start_weights[i1 + 19])):
-                # print(i1 + 19, ', ', i2)
-                # print(self.weights[i1 + 19][i2])
-                # print()
-                # await websocket.send(str(self.weights[i1 + 19][i2]))
                 self.start_weights[i1 + 19][i2] = self.end_weights[i1 + 19][i2] - self.start_weights[i1 + 19][i2]
 
         for i2 in range(len(self.start_weights[24])):
             for i3 in range(len(self.start_weights[24][i2])):
-                # print(24, ', ', i2, ', ', i3)
-                # print(self.weights[24][i2][i3])
-                # print()
-                # await websocket.send(str(self.weights[24][i2][i3]))
                 self.start_weights[24][i2][i3] = self.end_weights[24][i2][i3] - self.start_weights[24][i2][i3]
 
         for i2 in range(len(self.start_weights[25])):
-            # print(25, ', ', i2)
-            # print(self.weights[25][i2])
-            # print()
-            # await websocket.send(str(self.weights[25][i2]))
             self.start_weights[25][i2] = self.end_weights[25][i2] - self.start_weights[25][i2]
 
         self.delta_weights = self.start_weights
 
-        print('Расчёт градиентов (изменений весов нейронной сети) успешно выполнен')
+        print('Расчёт изменений весов нейронной сети (delta_weights) успешно выполнен')
         print()
-        self.log.writelines('Расчёт градиентов (изменений весов нейронной сети) успешно выполнен')
+        self.log.writelines('Расчёт изменений весов нейронной сети (delta_weights) успешно выполнен\n')
+        self.log.writelines('\n')
         self.log.writelines('\n')
 
     # Метод для отправки весов
     async def send_weights(self, websocket):
-        start_time = time.time()
-        print('Идёт отправка весов. Завершено на 0%')
-        self.log.writelines('Идёт отправка весов. Завершено на 0%')
-        total_weights = 4250058
-        send_weights = 0
-        send_persentage = 0
+        start_time = time.time() # Задаём счётчик времени
+        print('Идёт отправка весов на сервер. Завершено на 0%')
+        self.log.writelines('Идёт отправка весов на сервер. Завершено на 0%\n')
+        total_weights = 4250058 # Общее количество весов нейронной сети
+        send_weights = 0 # Количество отправленных весов
+        send_persentage = 0 # Процент отправленных весов
 
         for i2 in range(len(self.delta_weights[0])):
             for i3 in range(len(self.delta_weights[0][i2])):
@@ -277,6 +242,7 @@ class Client:
                     message = 'Идёт отправка весов на сервер. Завершено на ' + str(send_persentage) + '%'
                     print(message)
                     self.log.writelines(message)
+                    self.log.writelines('\n')
 
         for i1 in range(5):
             for i2 in range(len(self.delta_weights[i1 + 13])):
@@ -303,23 +269,24 @@ class Client:
             send_weights = send_weights + 1
 
         end_time = time.time()
-        message = 'Время отправки весов составило ' + str(round(end_time - start_time, 2)) + ' минут'
+        message = 'Время отправки весов составило ' + str(round((end_time - start_time) / 60, 2)) + ' минут'
 
         print('Веса успешно отправлены')
         print(message)
         print()
-        self.log.writelines('Веса успешно отправлены')
+        self.log.writelines('Веса успешно отправлены\n')
         self.log.writelines(message)
+        self.log.writelines('\n')
         self.log.writelines('\n')
 
     # Метод для приёма весов
     async def get_weights(self, websocket):
-        start_time = time.time()
+        start_time = time.time() # Задаём счётчик времени
         print('Загрузка весов с сервера. Завершено на 0%')
-        self.log.writelines('Загрузка весов с сервера. Завершено на 0%')
-        total_weights = 4250058
-        get_weights = 0
-        get_persentage = 0
+        self.log.writelines('Загрузка весов с сервера. Завершено на 0%\n')
+        total_weights = 4250058 # Общее количество весов нейронной сети
+        get_weights = 0 # Количество отправленных весов
+        get_persentage = 0 # Процент отправленных весов
         weights = []
 
         weights0 = []
@@ -330,7 +297,6 @@ class Client:
                 for i4 in range(3):
                     weights3 = []
                     for i5 in range(32):
-                        # print(0, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
                         weights3.append(float(await websocket.recv()))
                         get_weights = get_weights + 1
                     weights2.append(np.array(weights3))
@@ -341,7 +307,6 @@ class Client:
         for i1 in range(5):
             weights1 = []
             for i2 in range(32):
-                # print(i1 + 1, ', ', i2)
                 weights1.append(float(await websocket.recv()))
                 get_weights = get_weights + 1
             weights.append(np.array(weights1))
@@ -354,7 +319,6 @@ class Client:
                 for i4 in range(32):
                     weights3 = []
                     for i5 in range(64):
-                        # print(6, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
                         weights3.append(float(await websocket.recv()))
                         get_weights = get_weights + 1
                     weights2.append(np.array(weights3))
@@ -365,7 +329,6 @@ class Client:
         for i1 in range(5):
             weights1 = []
             for i2 in range(64):
-                # print(i1 + 7, ', ', i2)
                 weights1.append(float(await websocket.recv()))
                 get_weights = get_weights + 1
             weights.append(np.array(weights1))
@@ -374,7 +337,6 @@ class Client:
         for i2 in range(16384):
             weights1 = []
             for i3 in range(256):
-                # print(12, ', ', i2, ', ', i3)
                 weights1.append(float(await websocket.recv()))
                 get_weights = get_weights + 1
                 if(get_persentage < math.floor(get_weights / total_weights * 100)):
@@ -382,13 +344,13 @@ class Client:
                     message = 'Идёт загрузка весов с сервера. Завершено на ' + str(get_persentage) + '%'
                     print(message)
                     self.log.writelines(message)
+                    self.log.writelines('\n')
             weights0.append(np.array(weights1))
         weights.append(np.array(weights0))
 
         for i1 in range(5):
             weights1 = []
             for i2 in range(256):
-                # print(i1 + 13, ', ', i2)
                 weights1.append(float(await websocket.recv()))
                 get_weights = get_weights + 1
             weights.append(np.array(weights1))
@@ -397,7 +359,6 @@ class Client:
         for i2 in range(256):
             weights1 = []
             for i3 in range(128):
-                # print(18, ', ', i2, ', ', i3)
                 weights1.append(float(await websocket.recv()))
                 get_weights = get_weights + 1
             weights0.append(np.array(weights1))
@@ -406,7 +367,6 @@ class Client:
         for i1 in range(5):
             weights1 = []
             for i2 in range(128):
-                # print(i1 + 19, ', ', i2)
                 weights1.append(float(await websocket.recv()))
                 get_weights = get_weights + 1
             weights.append(np.array(weights1))
@@ -415,7 +375,6 @@ class Client:
         for i2 in range(128):
             weights1 = []
             for i3 in range(10):
-                # print(24, ', ', i2, ', ', i3)
                 weights1.append(float(await websocket.recv()))
                 get_weights = get_weights + 1
             weights0.append(np.array(weights1))
@@ -423,7 +382,6 @@ class Client:
 
         weights0 = []
         for i2 in range(10):
-            # print(25, ', ', i2)
             weights0.append(float(await websocket.recv()))
             get_weights = get_weights + 1
         weights.append(np.array(weights0))
@@ -431,13 +389,14 @@ class Client:
         self.start_weights = weights
 
         end_time = time.time()
-        message = 'Время загрузки весов составило ' + str(round(end_time - start_time, 2)) + ' минут'
+        message = 'Время загрузки весов составило ' + str(round((end_time - start_time) / 60, 2)) + ' минут'
 
         print('Веса успешно загружены')
         print(message)
         print()
-        self.log.writelines('Веса успешно загружены')
+        self.log.writelines('Веса успешно загружены\n')
         self.log.writelines(message)
+        self.log.writelines('\n')
         self.log.writelines('\n')
 
     # Метод для вывода метаданных о весах
@@ -499,13 +458,15 @@ class Client:
                 self.log_name = 'client_log' + message + '.txt'
                 self.log = open(self.log_name, 'w')
 
+                self.log.writelines('Обращение к серверу за данными\n')
+
                 await self.get_weights(websocket)
 
                 images_str = await websocket.recv() # Получение списка с изображениями для обучения
                 total_epochs_str = await websocket.recv() # Получение значения количества эпох для обучения
 
                 print('Данные от сервера успешно получены')
-                self.log.writelines('Данные от сервера успешно получены')
+                self.log.writelines('Данные от сервера успешно получены\n')
 
                 np.set_printoptions(threshold=100000)
 
@@ -526,13 +487,14 @@ class Client:
 
                 print('Данные успешно конвертированы')
                 print()
-                self.log.writelines('Данные успешно конвертированы')
+                self.log.writelines('Данные успешно конвертированы\n')
+                self.log.writelines('\n')
                 self.log.writelines('\n')
 
     # Метод для отправки результата (изменение весов при обучении, delta)
     async def send_result(self):
-        print('Отправка результатов (градиентов) на сервер')
-        self.log.writelines('Отправка результатов (градиентов) на сервер')
+        print('Отправка результатов на сервер')
+        self.log.writelines('Отправка результатов на сервер\n')
 
         uri = "ws://" + self.ip_address + ":" + str(self.port)
         async with websockets.connect(uri) as websocket:
@@ -540,7 +502,8 @@ class Client:
             await self.send_weights(websocket)
 
         print('Данные успешно отправлены на сервер')
-        self.log.writelines('Данные успешно отправлены на сервер')
+        self.log.writelines('Данные успешно отправлены на сервер\n')
+        self.log.writelines('\n')
         self.log.close()
 
 my_client = Client()

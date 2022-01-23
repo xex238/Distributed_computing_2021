@@ -1,3 +1,5 @@
+from tempfile import template
+
 import numpy as np
 from keras.models import Sequential
 from keras.models import load_model
@@ -8,6 +10,7 @@ from keras.utils import np_utils
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import confusion_matrix
+from keras.metrics import categorical_crossentropy, categorical_accuracy
 
 from keras.datasets import cifar10
 
@@ -76,7 +79,7 @@ class Server:
         print('Создание модели и тестовое обучение на 1-ой эпохе')
         print()
 
-        self.log.writelines('Создание модели и тестовое обучение на 1-ой эпохе')
+        self.log.writelines('Создание модели и тестовое обучение на 1-ой эпохе\n')
         self.log.writelines('\n')
 
         # loading in the data
@@ -138,9 +141,10 @@ class Server:
         print('Сервер запущен')
         print()
 
-        self.log.writelines('Модель создана и пройдено тестовое обучение')
+        self.log.writelines('Модель создана и пройдено тестовое обучение\n')
         self.log.writelines(message1)
-        self.log.writelines('Сервер запущен')
+        self.log.writelines('\n')
+        self.log.writelines('Сервер запущен\n')
         self.log.writelines('\n')
 
     # Создание модели и загрузка начальных значений весов
@@ -148,7 +152,7 @@ class Server:
         print('Создание модели и загрузка весов')
         print()
 
-        self.log.writelines('Создание модели и загрузка весов')
+        self.log.writelines('Создание модели и загрузка весов\n')
         self.log.writelines('\n')
 
         # loading in the data
@@ -208,115 +212,99 @@ class Server:
         print('Сервер запущен')
         print()
 
-        self.log.writelines('Модель создана и веса загружены')
+        self.log.writelines('Модель создана и веса загружены\n')
         self.log.writelines(message1)
-        self.log.writelines('Сервер запущен')
+        self.log.writelines('\n')
+        self.log.writelines('Сервер запущен\n')
         self.log.writelines('\n')
 
     # Метод для изменения глобального значения весов
     def change_global_weights(self, delta_weights):
         print('Корректировка глобальных весов нейронной сети')
+        self.log.writelines('Корректировка глобальных весов нейронной сети\n')
 
         for i2 in range(len(self.weights[0])):
             for i3 in range(len(self.weights[0][i2])):
                 for i4 in range(len(self.weights[0][i2][i3])):
                     for i5 in range(len(self.weights[0][i2][i3][i4])):
-                        # print(0, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
-                        # print(self.weights[0][i2][i3][i4][i5])
-                        # print()
                         self.weights[0][i2][i3][i4][i5] = self.weights[0][i2][i3][i4][i5] + delta_weights[0][i2][i3][i4][i5]
 
         for i1 in range(5):
             for i2 in range(len(self.weights[i1 + 1])):
-                # print(i1 + 1, ', ', i2)
-                # print(self.weights[i1 + 1][i2])
-                # print()
-                # await websocket.send(str(self.weights[i1 + 1][i2]))
                 self.weights[i1 + 1][i2] = self.weights[i1 + 1][i2] + delta_weights[i1 + 1][i2]
 
         for i2 in range(len(self.weights[6])):
             for i3 in range(len(self.weights[6][i2])):
                 for i4 in range(len(self.weights[6][i2][i3])):
                     for i5 in range(len(self.weights[6][i2][i3][i4])):
-                        # print(6, ', ', i2, ', ', i3, ', ', i4, ', ', i5)
-                        # print(self.weights[6][i2][i3][i4][i5])
-                        # print()
-                        # await websocket.send(str(self.weights[6][i2][i3][i4][i5]))
                         self.weights[6][i2][i3][i4][i5] = self.weights[6][i2][i3][i4][i5] + delta_weights[6][i2][i3][i4][i5]
 
         for i1 in range(5):
             for i2 in range(len(self.weights[i1 + 7])):
-                # print(i1 + 7, ', ', i2)
-                # print(self.weights[i1 + 7][i2])
-                # print()
-                # await websocket.send(str(self.weights[i1 + 7][i2]))
                 self.weights[i1 + 7][i2] = self.weights[i1 + 7][i2] + delta_weights[i1 + 7][i2]
 
         for i2 in range(len(self.weights[12])):
             for i3 in range(len(self.weights[12][i2])):
-                # print(12, ', ', i2, ', ', i3)
-                # print(self.weights[12][i2][i3])
-                # print()
-                # await websocket.send(str(self.weights[12][i2][i3]))
                 self.weights[12][i2][i3] = self.weights[12][i2][i3] + delta_weights[12][i2][i3]
 
         for i1 in range(5):
             for i2 in range(len(self.weights[i1 + 13])):
-                # print(i1 + 13, ', ', i2)
-                # print(self.weights[i1 + 13][i2])
-                # print()
-                # await websocket.send(str(self.weights[i1 + 13][i2]))
                 self.weights[i1 + 13][i2] = self.weights[i1 + 13][i2] + delta_weights[i1 + 13][i2]
 
         for i2 in range(len(self.weights[18])):
             for i3 in range(len(self.weights[18][i2])):
-                # print(18, ', ', i2, ', ', i3)
-                # print(self.weights[18][i2][i3])
-                # print()
-                # await websocket.send(str(self.weights[18][i2][i3]))
                 self.weights[18][i2][i3] = self.weights[18][i2][i3] + delta_weights[18][i2][i3]
 
         for i1 in range(5):
             for i2 in range(len(self.weights[i1 + 19])):
-                # print(i1 + 19, ', ', i2)
-                # print(self.weights[i1 + 19][i2])
-                # print()
-                # await websocket.send(str(self.weights[i1 + 19][i2]))
                 self.weights[i1 + 19][i2] = self.weights[i1 + 19][i2] + delta_weights[i1 + 19][i2]
 
         for i2 in range(len(self.weights[24])):
             for i3 in range(len(self.weights[24][i2])):
-                # print(24, ', ', i2, ', ', i3)
-                # print(self.weights[24][i2][i3])
-                # print()
-                # await websocket.send(str(self.weights[24][i2][i3]))
                 self.weights[24][i2][i3] = self.weights[24][i2][i3] + delta_weights[24][i2][i3]
 
         for i2 in range(len(self.weights[25])):
-            # print(25, ', ', i2)
-            # print(self.weights[25][i2])
-            # print()
-            # await websocket.send(str(self.weights[25][i2]))
             self.weights[25][i2] = self.weights[25][i2] + delta_weights[25][i2]
 
         print('Глобальные значения весов успешно обновлены')
+        self.log.writelines('Глобальные значения весов успешно обновлены\n')
 
     # Тестирование обученной нейронной сети на тестовых данных
     def test_nn(self):
         print('Выполняется проверка нейронной сети на тестовых данных')
-        self.log.writelines('Выполняется проверка нейронной сети на тестовых данных')
+        self.log.writelines('Выполняется проверка нейронной сети на тестовых данных\n')
 
         self.model.set_weights(self.weights) # Загрузка глобальных значений весов в модель
         y_predict = self.model.predict(x=self.X_test) # Прогнозирование
 
         # Вывод полученных и действительных значений в консоль и в log файл
-        message1 = 'y: ' + str(self.y_test)
-        message2 = 'y_predict: ' + str(y_predict)
-        print(message1)
-        print(message2)
+        try:
+            message3 = 'type(y_test): ' + str(type(self.y_test))
+            message4 = 'type(y_predict): ' + str(type(y_predict))
+            print(message3)
+            print(message4)
+            self.log.writelines(message3)
+            self.log.writelines('\n')
+            self.log.writelines(message4)
+            self.log.writelines('\n')
+        except Exception:
+            print('Невозможно определить тип переменных y_test и y_predict')
+            self.log.writelines('Невозможно определить тип переменных y_test и y_predict\n')
+
+        try:
+            message3 = 'np.shape(y_test): ' + str(np.shape(self.y_test))
+            message4 = 'np.shape(y_predict): ' + str(np.shape(y_predict))
+            print(message3)
+            print(message4)
+            self.log.writelines(message3)
+            self.log.writelines('\n')
+            self.log.writelines(message4)
+            self.log.writelines('\n')
+        except Exception:
+            print('Не удалось определить размерность массивов y_test и y_predict')
+            self.log.writelines('Не удалось определить размерность массивов y_test и y_predict\n')
+
         print()
-        self.log.writelines(message1)
-        self.log.writelines(message2)
         self.log.writelines('\n')
 
         # Расчёт метрик
@@ -332,12 +320,38 @@ class Server:
         '''
 
         try:
+            ca = categorical_accuracy(self.y_test, y_predict)
+            message = 'categorical_accuracy: ' + str(ca)
+            print(message)
+            self.log.writelines(message)
+        except Exception as ex:
+            print('Возникла ошибка при подсчёте метрики categorical_accuracy')
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
+            self.log.writelines('Возникла ошибка при подсчёте метрики categorical_accuracy')
+
+        try:
+            ca = categorical_crossentropy(self.y_test, y_predict)
+            message = 'categorical_crossentropy: ' + str(ca)
+            print(message)
+            self.log.writelines(message)
+        except Exception as ex:
+            print('Возникла ошибка при подсчёте метрики categorical_crossentropy')
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
+            self.log.writelines('Возникла ошибка при подсчёте метрики categorical_crossentropy')
+
+        # Не работающие метрики
+        '''
+        try:
             cvs = cross_val_score(y_predict, self.X_test, self.y_test)
             message = 'cross_val_score: ' + str(cvs)
             print(message)
             self.log.writelines(message)
-        except Exception:
+        except Exception as ex:
             print('Возникла ошибка при подсчёте метрики cross_val_score')
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
             self.log.writelines('Возникла ошибка при подсчёте метрики cross_val_score')
 
         try:
@@ -345,8 +359,10 @@ class Server:
             message = 'precision_score: ' + str(precision)
             print(message)
             self.log.writelines(message)
-        except Exception:
+        except Exception as ex:
             print('Возникла ошибка при подсчёте метрики precision_score')
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
             self.log.writelines('Возникла ошибка при подсчёте метрики precision_score')
 
         try:
@@ -354,8 +370,10 @@ class Server:
             message = 'recall_score: ' + str(recall)
             print(message)
             self.log.writelines(message)
-        except Exception:
+        except Exception as ex:
             print('Возникла ошибка при подсчёте метрики recall_score')
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
             self.log.writelines('Возникла ошибка при подсчёте метрики recall_score')
 
         try:
@@ -363,23 +381,26 @@ class Server:
             message = 'confusion_matrix: ' + str(cm)
             print(message)
             self.log.writelines(message)
-        except Exception:
+        except Exception as ex:
             print('Возникла ошибка при подсчёте confusion_matrix')
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
             self.log.writelines('Возникла ошибка при подсчёте confusion_matrix')
+        '''
 
         print('Проверка нейронной сети на тестовых данных завершена')
         print()
-        self.log.writelines('Проверка нейронной сети на тестовых данных завершена')
+        self.log.writelines('Проверка нейронной сети на тестовых данных завершена\n')
         self.log.writelines('\n')
 
     # Метод для отправки весов
     async def send_weights(self, websocket):
-        start_time = time.time()
+        start_time = time.time() # Задаём счётчик времени
         print('Идёт отправка весов. Завершено на 0%')
-        self.log.writelines('Идёт отправка весов. Завершено на 0%')
-        total_weights = 4250058
-        send_weights = 0
-        send_persentage = 0
+        self.log.writelines('Идёт отправка весов. Завершено на 0%\n')
+        total_weights = 4250058 # Общее количество весов нейронной сети
+        send_weights = 0 # Количество отправленных весов
+        send_persentage = 0 # Процент отправленных весов
 
         for i2 in range(len(self.weights[0])):
             for i3 in range(len(self.weights[0][i2])):
@@ -414,6 +435,7 @@ class Server:
                     message = 'Идёт отправка весов клиенту. Завершено на ' + str(send_persentage) + '%'
                     print(message)
                     self.log.writelines(message)
+                    self.log.writelines('\n')
 
         for i1 in range(5):
             for i2 in range(len(self.weights[i1 + 13])):
@@ -440,23 +462,24 @@ class Server:
             send_weights = send_weights + 1
 
         end_time = time.time()
-        message = 'Время отправки весов составило ' + str(round(end_time - start_time, 2)) + ' минут'
+        message = 'Время отправки весов составило ' + str(round((end_time - start_time) / 60, 2)) + ' минут'
 
         print('Веса успешно отправлены')
         print(message)
         print()
-        self.log.writelines('Веса успешно отправлены')
+        self.log.writelines('Веса успешно отправлены\n')
         self.log.writelines(message)
+        self.log.writelines('\n')
         self.log.writelines('\n')
 
     # Метод для приёма весов
     async def get_weights(self, websocket):
-        start_time = time.time()
+        start_time = time.time() # Задаём счётчик времени
         print('Загрузка весов от клиента... Завершено на 0%')
-        self.log.writelines('Загрузка весов от клиента... Завершено на 0%')
-        total_weights = 4250058
-        get_weights = 0
-        get_persentage = 0
+        self.log.writelines('Загрузка весов от клиента... Завершено на 0%\n')
+        total_weights = 4250058 # Общее количество весов нейронной сети
+        get_weights = 0 # Количество отправленных весов
+        get_persentage = 0 # Процент отправленных весов
         weights = []
 
         weights0 = []
@@ -514,6 +537,7 @@ class Server:
                     message = 'Идёт загрузка весов от клиента. Завершено на ' + str(get_persentage) + '%'
                     print(message)
                     self.log.writelines(message)
+                    self.log.writelines('\n')
             weights0.append(np.array(weights1))
         weights.append(np.array(weights0))
 
@@ -556,13 +580,14 @@ class Server:
         weights.append(np.array(weights0))
 
         end_time = time.time()
-        message = 'Время загрузки весов составило ' + str(round(end_time - start_time, 2)) + ' минут'
+        message = 'Время загрузки весов составило ' + str(round((end_time - start_time) / 60, 2)) + ' минут'
 
         print('Веса успешно загружены')
         print(message)
         print()
-        self.log.writelines('Веса успешно загружены')
+        self.log.writelines('Веса успешно загружены\n')
         self.log.writelines(message)
+        self.log.writelines('\n')
         self.log.writelines('\n')
 
         return weights
@@ -612,16 +637,15 @@ class Server:
 
     # websocket метод для прослушивания заданного порта и реакции на запросы
     async def data_exchange(self, websocket):
-        self.print_weights_metadata() # Вывод на экран метаданных о переменной weights (типы данных списка)
-
         message = await websocket.recv() # Приём первоначального блока данных
-        print(message)
-        print()
-        self.log.writelines(message)
-        self.log.writelines('\n')
 
         if(message == 'GET TASK'): # Если клиент запросил "задание"
             if(self.count_of_epochs != 0): # Если не все "задания" ещё выданы
+                print('Клиент запросил задание с сервера')
+                print('Выполняется генерирование задания...')
+                self.log.writelines('Клиент запросил задание с сервера\n')
+                self.log.writelines('Выполняется генерирование задания...\n')
+
                 # Сгенерировать случайным образом изображения для обучения
                 rand_images = []
                 l = list(range(1, 50001))
@@ -636,6 +660,11 @@ class Server:
                 epochs_per_person_str = str(self.epochs_per_person)
                 client_ID_str = str(self.client_ID)
 
+                print('Задание успешно сгенерировано')
+                print('Выполняется отправка задания клиенту...')
+                self.log.writelines('Задание успешно сгенерировано\n')
+                self.log.writelines('Выполняется отправка задания клиенту...\n')
+
                 # Отправить ID клиента
                 await(websocket.send(client_ID_str))
 
@@ -648,7 +677,8 @@ class Server:
 
                 print('Данные успешно отправлены')
                 print()
-                self.log.writelines('Данные успешно отправлены')
+                self.log.writelines('Данные успешно отправлены\n')
+                self.log.writelines('\n')
                 self.log.writelines('\n')
 
                 self.client_ID = self.client_ID + 1
@@ -656,26 +686,35 @@ class Server:
             else:
                 await websocket.send('NEURAL_NETWORK_ALREADY_TRAINED')
         elif(message == 'SEND RESULT'): # Если клиент отправил выполненное "задание"
+            print('Выполняется приём выполненного задания от клиента...')
+            self.log.writelines('Выполняется приём выполненного задания от клиента...\n')
+
             # Принимаем новые значения весов от клиента
             delta_weights = await self.get_weights(websocket)
+
+            print('Приём от клиента выполненного задания успешно завершён')
+            self.log.writelines('Приём от клиента выполненного задания успешно завершён\n')
 
             self.change_global_weights(delta_weights) # Изменение глобальных значений весов
             self.total_received_tasks = self.total_received_tasks + 1 # Учёт количества клиентов, отправивших обновлённые значения весов
 
-            print('Веса от клиента успешно приняты')
+            message = 'Количество клиентов отправивших задания: ' + str(self.total_received_tasks)
+            print(message)
+            print()
+            self.log.writelines(message)
+            self.log.writelines('\n')
+            self.log.writelines('\n')
 
-            if(self.total_received_tasks * self.epochs_per_person == self.count_of_epochs): # Если все задания уже выполнены
+            if(round(self.total_received_tasks * self.epochs_per_person) == round(self.count_of_epochs)): # Если все задания уже выполнены
                 print('Распределённое обучение нейронной сети завершено')
-                self.log.writelines('Распределённое обучение нейронной сети завершено')
+                self.log.writelines('Распределённое обучение нейронной сети завершено\n')
 
                 self.test_nn() # Тестирование нейронной сети (проверка нейронной сети на тестовых данных)
 
-                self.model.save_weights(
-                    self.weights_result_filename_h5)  # Сохранение окончательных значений весов в файл
+                self.model.save_weights(self.weights_result_filename_h5)  # Сохранение окончательных значений весов в файл
 
                 message1 = 'Окончательные значения весов сохранены в файле ' + self.weights_result_filename_h5
                 print(message1)
-                print()
                 self.log.writelines(message1)
                 self.log.writelines('\n')
 
@@ -684,11 +723,13 @@ class Server:
             else:
                 message1 = 'Метрики нейронной сети после ' + str(self.total_received_tasks) + '-ого клиента'
                 message2 = 'Количество пройденных эпох обучения: ' + str(self.total_received_tasks * self.epochs_per_person)
-                print(message1)
                 print(message2)
+                print(message1)
                 print()
-                self.log.writelines(message1)
                 self.log.writelines(message2)
+                self.log.writelines('\n')
+                self.log.writelines(message1)
+                self.log.writelines('\n')
                 self.log.writelines('\n')
 
                 self.test_nn() # Тестирование нейронной сети (проверка нейронной сети на тестовых данных)
