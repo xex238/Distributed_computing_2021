@@ -31,7 +31,8 @@ class Server:
 
         self.train_images = 50000  # Количество изображений для обучения
         self.total_received_tasks = 0 # Общее количество полученных результатов от клиента
-        self.count_of_epochs = 3  # Общее количество эпох обучения
+        self.epochs_total = 3  # Общее количество эпох обучения
+        self.epochs_computing = 0 # Количество эпох, пройденных на данный момент
         self.epochs_per_person = 1  # Количество эпох обучения для одного узла
         self.part_of_images = 0.01  # Доля изображений для хоста для обучение нейронной сети (изображения генерируются
         # случайным образом)
@@ -46,8 +47,10 @@ class Server:
         # Данные датасета
         self.X_test = []
         self.y_test = []
+        self.y_test_base = []
         self.X_train = []
         self.y_train = []
+        self.y_train_base = []
 
         self.class_num = None
 
@@ -59,6 +62,19 @@ class Server:
         self.log_name = 'server_log.txt' # Имя файла для логов
         self.log = open(self.log_name, 'w') # Файл с логами
 
+        # Переменные с метриками
+        self.confusion_matrix = []
+
+        self.accuracy = []
+
+        self.precision_macro = []
+        self.precision_micro = []
+        self.precision_weighted = []
+
+        self.recall_macro = []
+        self.recall_micro = []
+        self.recall_weighted = []
+
     # Изменить некоторые начальные значения
     def change_data(self):
         answer = input('Изменить значения по умолчанию? (y|n) ')
@@ -67,8 +83,8 @@ class Server:
             self.ip_address = (input(message))
             message = 'Введите номер порта, на котором будем открывать websocket соединение: '
             self.port = int(input(message))
-            message = 'Введите общее количество эпох обучения (по умолчанию ' + str(self.count_of_epochs) + ') '
-            self.count_of_epochs = int(input(message))
+            message = 'Введите общее количество эпох обучения (по умолчанию ' + str(self.epochs_total) + ') '
+            self.epochs_total = int(input(message))
             message = 'Введите количество эпох обучения для одного клиента (по умолчанию ' + str(self.epochs_per_person) + ') '
             self.epochs_per_person = int(input(message))
             message = 'Введите долю изображений из обучающей выборки, отправляемых клиенту (по умолчанию ' + str(self.part_of_images) + ') '
@@ -164,6 +180,11 @@ class Server:
         self.X_train = self.X_train / 255.0
         self.X_test = self.X_test / 255.0
 
+        self.y_train_base = self.y_train
+        self.y_test_base = self.y_test
+        self.y_train_base = np.reshape(self.y_train_base, 50000)
+        self.y_test_base = np.reshape(self.y_test_base, 10000)
+
         # one hot encode outputs
         self.y_train = np_utils.to_categorical(self.y_train)
         self.y_test = np_utils.to_categorical(self.y_test)
@@ -217,6 +238,46 @@ class Server:
         self.log.writelines('\n')
         self.log.writelines('Сервер запущен\n')
         self.log.writelines('\n')
+
+        # self.test()
+
+    def test(self):
+        '''
+        print('y_train_base')
+        print(self.y_train_base)
+        print('type(y_train_base): ', type(self.y_train_base))
+        print('type(y_train_base[0]): ', type(self.y_train_base[0]))
+        print('len(y_train_base): ', len(self.y_train_base))
+        print('len(y_train_base[0]: ', len(self.y_train_base[0]))
+        print('shape(y_train_base): ', np.shape(self.y_train_base))
+        print('shape(y_train_base[0]: ', np.shape(self.y_train_base[0]))
+        '''
+
+        print('len(y_test_base): ', len(self.y_test_base))
+        print('shape(y_test_base): ', np.shape(self.y_test_base))
+
+        y_train_base = np.reshape(self.y_train_base, 50000)
+        y_test_base = np.reshape(self.y_test_base, 10000)
+        print('y_train_base_new: ', y_train_base)
+        print('y_train_base_new: ', y_test_base)
+
+        cm = confusion_matrix(y_test_base, y_test_base)
+        print('confusion_matrix:')
+        print(cm)
+
+        # print('y_train:')
+        # print(self.y_train)
+
+        # test_y_train = list(self.y_train_base)
+        # print('test_y_train: ', test_y_train)
+
+        # print('shape(y_test_base): ', np.shape(self.y_test_base))
+
+        # print('y_test_base: ', self.y_test_base)
+        # print('y_test_base[0]')
+        # print('len(y_test_base): ', len(self.y_test_base))
+        # self.y_test_base = np.reshape(self.y_test_base, 10000)
+        # print('y_test_base: ', self.y_test_base)
 
     # Метод для изменения глобального значения весов
     def change_global_weights(self, delta_weights):
@@ -277,7 +338,104 @@ class Server:
         self.model.set_weights(self.weights) # Загрузка глобальных значений весов в модель
         y_predict = self.model.predict(x=self.X_test) # Прогнозирование
 
-        # Вывод полученных и действительных значений в консоль и в log файл
+        y_predict = np.argmax(y_predict, axis=-1) # Возвращаем обратно метки классов
+
+        '''
+        np.set_printoptions(threshold=10)  # Полный вывод массива numpy (без сокращений)
+        self.y_test_base = list(self.y_test_base)
+        y_predict = list(y_predict)
+        try:
+            print('y_test_base: ', self.y_test_base)
+            print('y_predict: ', y_predict)
+            print('type(y_test_base): ', type(self.y_test_base))
+            print('type(y_predict): ', type(y_predict))
+            print('len(y_test_base): ', len(self.y_test_base))
+            print('len(y_predict): ', len(y_predict))
+            print('np.shape(y_test_base): ', np.shape(self.y_test_base))
+            print('np.shape(y_predict): ', np.shape(y_predict))
+        except Exception as ex:
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
+        '''
+
+        # Расчёт confusion_matrix
+        try:
+            cm = confusion_matrix(self.y_test_base, y_predict)
+            self.confusion_matrix.append(cm)
+            message = 'confusion_matrix:\n' + str(cm)
+            print(message)
+            self.log.writelines(message)
+            self.log.writelines('\n')
+        except Exception:
+            print('Возникла ошибка при подсчёте confusion_matrix')
+            self.log.writelines('Возникла ошибка при подсчёте confusion_matrix')
+
+        # Расчёт метрики accuracy
+        try:
+            accuracy = accuracy_score(self.y_test_base, y_predict)
+            self.accuracy.append(accuracy)
+            message = 'accuracy: ' + str(round(accuracy, 4))
+            print(message)
+            self.log.writelines(message)
+            self.log.writelines('\n')
+        except Exception:
+            print('Возникла ошибка при подсчёте метрики accuracy_score')
+            self.log.writelines('Возникла ошибка при подсчёте метрики accuracy_score')
+
+        # Расчёт метрики precision
+        try:
+            precision_macro = precision_score(self.y_test_base, y_predict, average='macro')
+            precision_micro = precision_score(self.y_test_base, y_predict, average='micro')
+            precision_weighted = precision_score(self.y_test_base, y_predict, average='weighted')
+            self.precision_macro.append(precision_macro)
+            self.precision_micro.append(precision_micro)
+            self.precision_weighted.append(precision_weighted)
+            message1 = 'precision_score (macro): ' + str(round(precision_macro, 4))
+            message2 = 'precision_score (micro): ' + str(round(precision_micro, 4))
+            message3 = 'precision_score (weighted): ' + str(round(precision_weighted, 4))
+            print(message1)
+            print(message2)
+            print(message3)
+            self.log.writelines(message1)
+            self.log.writelines('\n')
+            self.log.writelines(message2)
+            self.log.writelines('\n')
+            self.log.writelines(message3)
+            self.log.writelines('\n')
+        except Exception as ex:
+            print('Возникла ошибка при подсчёте метрики precision_score')
+            self.log.writelines('Возникла ошибка при подсчёте метрики precision_score')
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
+
+        # Расчёт метрики recall
+        try:
+            recall_macro = recall_score(self.y_test_base, y_predict, average='macro')
+            recall_micro = recall_score(self.y_test_base, y_predict, average='micro')
+            recall_weighted = recall_score(self.y_test_base, y_predict, average='weighted')
+            self.recall_macro.append(recall_macro)
+            self.recall_micro.append(recall_micro)
+            self.recall_weighted.append(recall_weighted)
+            message1 = 'recall_score (macro): ' + str(round(recall_macro, 4))
+            message2 = 'recall_score (micro): ' + str(round(recall_micro, 4))
+            message3 = 'recall_score (weighted): ' + str(round(recall_weighted, 4))
+            print(message1)
+            print(message2)
+            print(message3)
+            self.log.writelines(message1)
+            self.log.writelines('\n')
+            self.log.writelines(message2)
+            self.log.writelines('\n')
+            self.log.writelines(message3)
+            self.log.writelines('\n')
+        except Exception as ex:
+            print('Возникла ошибка при подсчёте метрики recall_score')
+            self.log.writelines('Возникла ошибка при подсчёте метрики recall_score')
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
+
+        # Расчёт метрик
+        '''
         try:
             message3 = 'type(y_test): ' + str(type(self.y_test))
             message4 = 'type(y_predict): ' + str(type(y_predict))
@@ -307,18 +465,6 @@ class Server:
         print()
         self.log.writelines('\n')
 
-        # Расчёт метрик
-        '''
-        try:
-            accuracy = accuracy_score(self.y_test, y_predict)
-            message = 'accuracy: ' + str(accuracy)
-            print(message)
-            self.log.writelines(message)
-        except Exception:
-            print('Возникла ошибка при подсчёте метрики accuracy_score')
-            self.log.writelines('Возникла ошибка при подсчёте метрики accuracy_score')
-        '''
-
         try:
             ca = categorical_accuracy(self.y_test, y_predict)
             message = 'categorical_accuracy: ' + str(ca)
@@ -342,7 +488,6 @@ class Server:
             self.log.writelines('Возникла ошибка при подсчёте метрики categorical_crossentropy')
 
         # Не работающие метрики
-        '''
         try:
             cvs = cross_val_score(y_predict, self.X_test, self.y_test)
             message = 'cross_val_score: ' + str(cvs)
@@ -353,17 +498,6 @@ class Server:
             message = template.format(type(ex).__name__, ex.args)
             print(message)
             self.log.writelines('Возникла ошибка при подсчёте метрики cross_val_score')
-
-        try:
-            precision = precision_score(self.y_test, y_predict, average=None)
-            message = 'precision_score: ' + str(precision)
-            print(message)
-            self.log.writelines(message)
-        except Exception as ex:
-            print('Возникла ошибка при подсчёте метрики precision_score')
-            message = template.format(type(ex).__name__, ex.args)
-            print(message)
-            self.log.writelines('Возникла ошибка при подсчёте метрики precision_score')
 
         try:
             recall = recall_score(self.y_test, y_predict, average=None)
@@ -640,7 +774,7 @@ class Server:
         message = await websocket.recv() # Приём первоначального блока данных
 
         if(message == 'GET TASK'): # Если клиент запросил "задание"
-            if(self.count_of_epochs != 0): # Если не все "задания" ещё выданы
+            if(self.epochs_total != 0): # Если не все "задания" ещё выданы
                 print('Клиент запросил задание с сервера')
                 print('Выполняется генерирование задания...')
                 self.log.writelines('Клиент запросил задание с сервера\n')
@@ -682,7 +816,7 @@ class Server:
                 self.log.writelines('\n')
 
                 self.client_ID = self.client_ID + 1
-                self.count_of_epochs = self.count_of_epochs - self.epochs_per_person # Уменьшение общего количества эпох обучения после выдачи "задания"
+                self.epochs_computing = self.epochs_computing + self.epochs_per_person # Изменяем счётчик эпох с прошедшим обучением
             else:
                 await websocket.send('NEURAL_NETWORK_ALREADY_TRAINED')
         elif(message == 'SEND RESULT'): # Если клиент отправил выполненное "задание"
@@ -705,7 +839,12 @@ class Server:
             self.log.writelines('\n')
             self.log.writelines('\n')
 
-            if(round(self.total_received_tasks * self.epochs_per_person) == round(self.count_of_epochs)): # Если все задания уже выполнены
+            # print('total_received_tasks: ', self.total_received_tasks)
+            # print('epochs_per_person: ', self.epochs_per_person)
+            # print('count_of_epochs: ', self.epochs_total)
+            # print('self.total_received_tasks * self.epochs_per_person: ', self.total_received_tasks * self.epochs_per_person)
+
+            if(self.total_received_tasks * self.epochs_per_person >= self.epochs_total): # Если все задания уже выполнены
                 print('Распределённое обучение нейронной сети завершено')
                 self.log.writelines('Распределённое обучение нейронной сети завершено\n')
 
