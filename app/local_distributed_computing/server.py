@@ -14,6 +14,8 @@ from keras.metrics import categorical_crossentropy, categorical_accuracy
 
 from keras.datasets import cifar10
 
+import matplotlib.pyplot as plt
+
 import asyncio
 import websockets
 import random
@@ -31,16 +33,21 @@ class Server:
 
         self.train_images = 50000  # Количество изображений для обучения
         self.total_received_tasks = 0 # Общее количество полученных результатов от клиента
-        self.epochs_total = 3  # Общее количество эпох обучения
+        # self.epochs_total = 3  # Общее количество эпох обучения
         self.epochs_computing = 0 # Количество эпох, пройденных на данный момент
-        self.epochs_per_person = 1  # Количество эпох обучения для одного узла
-        self.part_of_images = 0.01  # Доля изображений для хоста для обучение нейронной сети (изображения генерируются
-        # случайным образом)
+        # self.epochs_per_person = 1  # Количество эпох обучения для одного узла
+        # self.part_of_images = 0.01  # Доля изображений для хоста для обучение нейронной сети (изображения генерируются случайным образом)
+
+        self.epochs_total = 50  # Общее количество эпох обучения
+        self.epochs_per_person = 10  # Количество эпох обучения для одного узла
+        self.part_of_images = 0.1  # Доля изображений для хоста для обучение нейронной сети (изображения генерируются случайным образом)
 
         self.weights_filename_h5 = 'weights.h5' # Файл для хранения начальных значений весов в формате h5
         self.weights_filename_txt = 'weights.txt' # Файл для хранения весов в txt формате
         self.weights_result_filename_h5 = 'weights_result.h5' # Файл для хранения весов после обучения в формате h5
         self.weights = None  # Глобальные значения весов модели
+
+        self.confusion_matrix_filename = 'confusion_matrix.txt' # Файл для хранения confusion matrix
 
         self.model = None # Модель для тестирования нейронной сети
 
@@ -241,44 +248,6 @@ class Server:
 
         # self.test()
 
-    def test(self):
-        '''
-        print('y_train_base')
-        print(self.y_train_base)
-        print('type(y_train_base): ', type(self.y_train_base))
-        print('type(y_train_base[0]): ', type(self.y_train_base[0]))
-        print('len(y_train_base): ', len(self.y_train_base))
-        print('len(y_train_base[0]: ', len(self.y_train_base[0]))
-        print('shape(y_train_base): ', np.shape(self.y_train_base))
-        print('shape(y_train_base[0]: ', np.shape(self.y_train_base[0]))
-        '''
-
-        print('len(y_test_base): ', len(self.y_test_base))
-        print('shape(y_test_base): ', np.shape(self.y_test_base))
-
-        y_train_base = np.reshape(self.y_train_base, 50000)
-        y_test_base = np.reshape(self.y_test_base, 10000)
-        print('y_train_base_new: ', y_train_base)
-        print('y_train_base_new: ', y_test_base)
-
-        cm = confusion_matrix(y_test_base, y_test_base)
-        print('confusion_matrix:')
-        print(cm)
-
-        # print('y_train:')
-        # print(self.y_train)
-
-        # test_y_train = list(self.y_train_base)
-        # print('test_y_train: ', test_y_train)
-
-        # print('shape(y_test_base): ', np.shape(self.y_test_base))
-
-        # print('y_test_base: ', self.y_test_base)
-        # print('y_test_base[0]')
-        # print('len(y_test_base): ', len(self.y_test_base))
-        # self.y_test_base = np.reshape(self.y_test_base, 10000)
-        # print('y_test_base: ', self.y_test_base)
-
     # Метод для изменения глобального значения весов
     def change_global_weights(self, delta_weights):
         print('Корректировка глобальных весов нейронной сети')
@@ -332,200 +301,81 @@ class Server:
 
     # Тестирование обученной нейронной сети на тестовых данных
     def test_nn(self):
-        print('Выполняется проверка нейронной сети на тестовых данных')
-        self.log.writelines('Выполняется проверка нейронной сети на тестовых данных\n')
+        print('Выполняется прогнозирование тестовых данных')
+        self.log.writelines('Выполняется прогнозирование тестовых данных\n')
 
         self.model.set_weights(self.weights) # Загрузка глобальных значений весов в модель
         y_predict = self.model.predict(x=self.X_test) # Прогнозирование
-
         y_predict = np.argmax(y_predict, axis=-1) # Возвращаем обратно метки классов
 
-        '''
-        np.set_printoptions(threshold=10)  # Полный вывод массива numpy (без сокращений)
-        self.y_test_base = list(self.y_test_base)
-        y_predict = list(y_predict)
-        try:
-            print('y_test_base: ', self.y_test_base)
-            print('y_predict: ', y_predict)
-            print('type(y_test_base): ', type(self.y_test_base))
-            print('type(y_predict): ', type(y_predict))
-            print('len(y_test_base): ', len(self.y_test_base))
-            print('len(y_predict): ', len(y_predict))
-            print('np.shape(y_test_base): ', np.shape(self.y_test_base))
-            print('np.shape(y_predict): ', np.shape(y_predict))
-        except Exception as ex:
-            message = template.format(type(ex).__name__, ex.args)
-            print(message)
-        '''
-
-        # Расчёт confusion_matrix
-        try:
-            cm = confusion_matrix(self.y_test_base, y_predict)
-            self.confusion_matrix.append(cm)
-            message = 'confusion_matrix:\n' + str(cm)
-            print(message)
-            self.log.writelines(message)
-            self.log.writelines('\n')
-        except Exception:
-            print('Возникла ошибка при подсчёте confusion_matrix')
-            self.log.writelines('Возникла ошибка при подсчёте confusion_matrix')
-
-        # Расчёт метрики accuracy
-        try:
-            accuracy = accuracy_score(self.y_test_base, y_predict)
-            self.accuracy.append(accuracy)
-            message = 'accuracy: ' + str(round(accuracy, 4))
-            print(message)
-            self.log.writelines(message)
-            self.log.writelines('\n')
-        except Exception:
-            print('Возникла ошибка при подсчёте метрики accuracy_score')
-            self.log.writelines('Возникла ошибка при подсчёте метрики accuracy_score')
-
-        # Расчёт метрики precision
-        try:
-            precision_macro = precision_score(self.y_test_base, y_predict, average='macro')
-            precision_micro = precision_score(self.y_test_base, y_predict, average='micro')
-            precision_weighted = precision_score(self.y_test_base, y_predict, average='weighted')
-            self.precision_macro.append(precision_macro)
-            self.precision_micro.append(precision_micro)
-            self.precision_weighted.append(precision_weighted)
-            message1 = 'precision_score (macro): ' + str(round(precision_macro, 4))
-            message2 = 'precision_score (micro): ' + str(round(precision_micro, 4))
-            message3 = 'precision_score (weighted): ' + str(round(precision_weighted, 4))
-            print(message1)
-            print(message2)
-            print(message3)
-            self.log.writelines(message1)
-            self.log.writelines('\n')
-            self.log.writelines(message2)
-            self.log.writelines('\n')
-            self.log.writelines(message3)
-            self.log.writelines('\n')
-        except Exception as ex:
-            print('Возникла ошибка при подсчёте метрики precision_score')
-            self.log.writelines('Возникла ошибка при подсчёте метрики precision_score')
-            message = template.format(type(ex).__name__, ex.args)
-            print(message)
-
-        # Расчёт метрики recall
-        try:
-            recall_macro = recall_score(self.y_test_base, y_predict, average='macro')
-            recall_micro = recall_score(self.y_test_base, y_predict, average='micro')
-            recall_weighted = recall_score(self.y_test_base, y_predict, average='weighted')
-            self.recall_macro.append(recall_macro)
-            self.recall_micro.append(recall_micro)
-            self.recall_weighted.append(recall_weighted)
-            message1 = 'recall_score (macro): ' + str(round(recall_macro, 4))
-            message2 = 'recall_score (micro): ' + str(round(recall_micro, 4))
-            message3 = 'recall_score (weighted): ' + str(round(recall_weighted, 4))
-            print(message1)
-            print(message2)
-            print(message3)
-            self.log.writelines(message1)
-            self.log.writelines('\n')
-            self.log.writelines(message2)
-            self.log.writelines('\n')
-            self.log.writelines(message3)
-            self.log.writelines('\n')
-        except Exception as ex:
-            print('Возникла ошибка при подсчёте метрики recall_score')
-            self.log.writelines('Возникла ошибка при подсчёте метрики recall_score')
-            message = template.format(type(ex).__name__, ex.args)
-            print(message)
+        print('Прогнозирование тестовых данных успешно выполнено')
+        print('Выполняется расчёт метрик на тестовых данных')
+        self.log.writelines('Прогнозирование тестовых данных успешно выполнено\n')
+        self.log.writelines('Выполняется расчёт метрик на тестовых данных\n')
 
         # Расчёт метрик
-        '''
-        try:
-            message3 = 'type(y_test): ' + str(type(self.y_test))
-            message4 = 'type(y_predict): ' + str(type(y_predict))
-            print(message3)
-            print(message4)
-            self.log.writelines(message3)
-            self.log.writelines('\n')
-            self.log.writelines(message4)
-            self.log.writelines('\n')
-        except Exception:
-            print('Невозможно определить тип переменных y_test и y_predict')
-            self.log.writelines('Невозможно определить тип переменных y_test и y_predict\n')
-
-        try:
-            message3 = 'np.shape(y_test): ' + str(np.shape(self.y_test))
-            message4 = 'np.shape(y_predict): ' + str(np.shape(y_predict))
-            print(message3)
-            print(message4)
-            self.log.writelines(message3)
-            self.log.writelines('\n')
-            self.log.writelines(message4)
-            self.log.writelines('\n')
-        except Exception:
-            print('Не удалось определить размерность массивов y_test и y_predict')
-            self.log.writelines('Не удалось определить размерность массивов y_test и y_predict\n')
-
-        print()
+        # 1) Расчёт confusion_matrix
+        cm = confusion_matrix(self.y_test_base, y_predict)
+        self.confusion_matrix.append(cm)
+        message = 'confusion_matrix:\n' + str(cm)
+        print(message)
+        self.log.writelines(message)
         self.log.writelines('\n')
 
-        try:
-            ca = categorical_accuracy(self.y_test, y_predict)
-            message = 'categorical_accuracy: ' + str(ca)
-            print(message)
-            self.log.writelines(message)
-        except Exception as ex:
-            print('Возникла ошибка при подсчёте метрики categorical_accuracy')
-            message = template.format(type(ex).__name__, ex.args)
-            print(message)
-            self.log.writelines('Возникла ошибка при подсчёте метрики categorical_accuracy')
-
-        try:
-            ca = categorical_crossentropy(self.y_test, y_predict)
-            message = 'categorical_crossentropy: ' + str(ca)
-            print(message)
-            self.log.writelines(message)
-        except Exception as ex:
-            print('Возникла ошибка при подсчёте метрики categorical_crossentropy')
-            message = template.format(type(ex).__name__, ex.args)
-            print(message)
-            self.log.writelines('Возникла ошибка при подсчёте метрики categorical_crossentropy')
-
-        # Не работающие метрики
-        try:
-            cvs = cross_val_score(y_predict, self.X_test, self.y_test)
-            message = 'cross_val_score: ' + str(cvs)
-            print(message)
-            self.log.writelines(message)
-        except Exception as ex:
-            print('Возникла ошибка при подсчёте метрики cross_val_score')
-            message = template.format(type(ex).__name__, ex.args)
-            print(message)
-            self.log.writelines('Возникла ошибка при подсчёте метрики cross_val_score')
-
-        try:
-            recall = recall_score(self.y_test, y_predict, average=None)
-            message = 'recall_score: ' + str(recall)
-            print(message)
-            self.log.writelines(message)
-        except Exception as ex:
-            print('Возникла ошибка при подсчёте метрики recall_score')
-            message = template.format(type(ex).__name__, ex.args)
-            print(message)
-            self.log.writelines('Возникла ошибка при подсчёте метрики recall_score')
-
-        try:
-            cm = confusion_matrix(self.y_test, y_predict)
-            message = 'confusion_matrix: ' + str(cm)
-            print(message)
-            self.log.writelines(message)
-        except Exception as ex:
-            print('Возникла ошибка при подсчёте confusion_matrix')
-            message = template.format(type(ex).__name__, ex.args)
-            print(message)
-            self.log.writelines('Возникла ошибка при подсчёте confusion_matrix')
-        '''
-
-        print('Проверка нейронной сети на тестовых данных завершена')
-        print()
-        self.log.writelines('Проверка нейронной сети на тестовых данных завершена\n')
+        # 2) Расчёт метрики accuracy
+        accuracy = accuracy_score(self.y_test_base, y_predict)
+        self.accuracy.append(accuracy)
+        message = 'accuracy: ' + str(round(accuracy, 4))
+        print(message)
+        self.log.writelines(message)
         self.log.writelines('\n')
+
+        # 3) Расчёт метрики precision (macro, micro, weighted)
+        precision_macro = precision_score(self.y_test_base, y_predict, average='macro')
+        precision_micro = precision_score(self.y_test_base, y_predict, average='micro')
+        precision_weighted = precision_score(self.y_test_base, y_predict, average='weighted')
+        self.precision_macro.append(precision_macro)
+        self.precision_micro.append(precision_micro)
+        self.precision_weighted.append(precision_weighted)
+        message1 = 'precision_score (macro): ' + str(round(precision_macro, 4))
+        message2 = 'precision_score (micro): ' + str(round(precision_micro, 4))
+        message3 = 'precision_score (weighted): ' + str(round(precision_weighted, 4))
+        print(message1)
+        print(message2)
+        print(message3)
+        self.log.writelines(message1)
+        self.log.writelines('\n')
+        self.log.writelines(message2)
+        self.log.writelines('\n')
+        self.log.writelines(message3)
+        self.log.writelines('\n')
+
+        # 4) Расчёт метрики recall (macro, micro, weighted)
+        recall_macro = recall_score(self.y_test_base, y_predict, average='macro')
+        recall_micro = recall_score(self.y_test_base, y_predict, average='micro')
+        recall_weighted = recall_score(self.y_test_base, y_predict, average='weighted')
+        self.recall_macro.append(recall_macro)
+        self.recall_micro.append(recall_micro)
+        self.recall_weighted.append(recall_weighted)
+        message1 = 'recall_score (macro): ' + str(round(recall_macro, 4))
+        message2 = 'recall_score (micro): ' + str(round(recall_micro, 4))
+        message3 = 'recall_score (weighted): ' + str(round(recall_weighted, 4))
+        print(message1)
+        print(message2)
+        print(message3)
+        self.log.writelines(message1)
+        self.log.writelines('\n')
+        self.log.writelines(message2)
+        self.log.writelines('\n')
+        self.log.writelines(message3)
+        self.log.writelines('\n')
+
+        print('Расчёт метрик на тестовых данных успешно произведён')
+        print()
+        self.log.writelines('Расчёт метрик на тестовых данных успешно произведён\n')
+        self.log.writelines('\n')
+
+        return cm
 
     # Метод для отправки весов
     async def send_weights(self, websocket):
@@ -726,49 +576,6 @@ class Server:
 
         return weights
 
-    # Метод для вывода метаданных о весах
-    def print_weights_metadata(self):
-        print('type(weights): ', type(self.weights))
-
-        print('type(weights[0]): ', type(self.weights[0]))
-        print('type(weights[0][0]): ', type(self.weights[0][0]))
-        print('type(weights[0][0][0]): ', type(self.weights[0][0][0]))
-        print('type(weights[0][0][0][0]): ', type(self.weights[0][0][0][0]))
-        print('type(weights[0][0][0][0][0]): ', type(self.weights[0][0][0][0][0]))
-
-        print('type(weights[1]): ', type(self.weights[1]))
-        print('type(weights[1][0]): ', type(self.weights[1][0]))
-
-        print('type(weights[6]): ', type(self.weights[6]))
-        print('type(weights[6][0]): ', type(self.weights[6][0]))
-        print('type(weights[6][0][0]): ', type(self.weights[6][0][0]))
-        print('type(weights[6][0][0][0]): ', type(self.weights[6][0][0][0]))
-        print('type(weights[6][0][0][0][0]): ', type(self.weights[6][0][0][0][0]))
-
-        print('type(weights[7]): ', type(self.weights[7]))
-        print('type(weights[7][0]): ', type(self.weights[7][0]))
-
-        print('type(weights[12]): ', type(self.weights[12]))
-        print('type(weights[12][0]): ', type(self.weights[12][0]))
-        print('type(weights[12][0][0]): ', type(self.weights[12][0][0]))
-
-        print('type(weights[13]): ', type(self.weights[13]))
-        print('type(weights[13][0]): ', type(self.weights[13][0]))
-
-        print('type(weights[18]): ', type(self.weights[18]))
-        print('type(weights[18][0]): ', type(self.weights[18][0]))
-        print('type(weights[18][0][0]): ', type(self.weights[18][0][0]))
-
-        print('type(weights[19]): ', type(self.weights[19]))
-        print('type(weights[19][0]): ', type(self.weights[19][0]))
-
-        print('type(weights[24]): ', type(self.weights[24]))
-        print('type(weights[24][0]): ', type(self.weights[24][0]))
-        print('type(weights[24][0][0]): ', type(self.weights[24][0][0]))
-
-        print('type(weights[25]): ', type(self.weights[25]))
-        print('type(weights[25][0]): ', type(self.weights[25][0]))
-
     # websocket метод для прослушивания заданного порта и реакции на запросы
     async def data_exchange(self, websocket):
         message = await websocket.recv() # Приём первоначального блока данных
@@ -848,7 +655,15 @@ class Server:
                 print('Распределённое обучение нейронной сети завершено')
                 self.log.writelines('Распределённое обучение нейронной сети завершено\n')
 
-                self.test_nn() # Тестирование нейронной сети (проверка нейронной сети на тестовых данных)
+                cm = self.test_nn() # Тестирование нейронной сети (проверка нейронной сети на тестовых данных)
+
+                # Сохранение итоговой confusion matrix в файл
+                file = open(self.confusion_matrix_filename, 'w')
+                file.writelines(str(cm))
+                file.writelines('\n')
+                file.close()
+
+                self.draw_metrix_data() # Вывод динамики изменения метрик во время обучения в виде графиков
 
                 self.model.save_weights(self.weights_result_filename_h5)  # Сохранение окончательных значений весов в файл
 
@@ -873,6 +688,65 @@ class Server:
 
                 self.test_nn() # Тестирование нейронной сети (проверка нейронной сети на тестовых данных)
 
+    # Метод для вывода графиков обучения нейронной сети
+    def draw_metrix_data(self):
+        epochs = [(i + 1) * self.epochs_per_person for i in range(math.floor(self.epochs_total / self.epochs_per_person))]
+
+        plt.figure(figsize=(12, 9))
+
+        plt.subplot(2, 3, 1)
+        # plt.title('Значение метрики precision (macro) на каждой эпохе')
+        plt.xlabel('Эпохи')
+        plt.ylabel('precision (macro)')
+        plt.grid()
+        plt.plot(epochs, self.precision_macro)
+
+        plt.subplot(2, 3, 2)
+        # plt.title('Значение метрики precision (micro) на каждой эпохе')
+        plt.xlabel('Эпохи')
+        plt.ylabel('precision (mmicro)')
+        plt.grid()
+        plt.plot(epochs, self.precision_micro)
+
+        plt.subplot(2, 3, 3)
+        # plt.title('Значение метрики precision (weighted) на каждой эпохе')
+        plt.xlabel('Эпохи')
+        plt.ylabel('precision (weighted)')
+        plt.grid()
+        plt.plot(epochs, self.precision_weighted)
+
+        plt.subplot(2, 3, 4)
+        # plt.title('Значение метрики recall (macro) на каждой эпохе')
+        plt.xlabel('Эпохи')
+        plt.ylabel('recall (macro)')
+        plt.grid()
+        plt.plot(epochs, self.recall_macro)
+
+        plt.subplot(2, 3, 5)
+        # plt.title('Значение метрики recall (micro) на каждой эпохе')
+        plt.xlabel('Эпохи')
+        plt.ylabel('recall (micro)')
+        plt.grid()
+        plt.plot(epochs, self.recall_micro)
+
+        plt.subplot(2, 3, 6)
+        # plt.title('Значение метрики recall (weighted) на каждой эпохе')
+        plt.xlabel('Эпохи')
+        plt.ylabel('recall (weighted)')
+        plt.grid()
+        plt.plot(epochs, self.recall_weighted)
+
+        plt.savefig('precision_recall_metrics.png')
+        plt.show()
+
+        plt.xlabel('Эпохи')
+        plt.ylabel('accuracy')
+        plt.grid()
+        plt.plot(epochs, self.accuracy)
+
+        plt.savefig('accuracy_metric.png')
+        plt.show()
+
 # Создание экземпляра класса Server и задание основных входных данных
 my_server = Server()
 # my_server.change_data()
@@ -883,7 +757,6 @@ if(check_file):
     my_server.load_base_weights()
 else:
     my_server.get_base_weights()
-# my_server.print_weights_metadata()
 
 # Запуск сервера
 try:
