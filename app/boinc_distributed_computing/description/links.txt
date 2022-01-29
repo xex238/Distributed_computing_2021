@@ -1,0 +1,18 @@
+Creating and Configuring a BOINC Project:
+http://www.spy-hill.net/myers/help/boinc/Create_Project.html
+
+BOINC project creation cookbook:
+https://boinc.berkeley.edu/trac/wiki/CreateProjectCookbook
+
+----------
+Work generator:
+https://boinc.berkeley.edu/trac/wiki/WorkGeneration
+
+Validator:
+https://boinc.berkeley.edu/trac/wiki/ValidationIntro
+
+Assimilator:
+https://boinc.berkeley.edu/trac/wiki/AssimilateIntro
+
+The project configuration file:
+https://boinc.berkeley.edu/trac/wiki/ProjectConfigFile
