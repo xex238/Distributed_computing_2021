@@ -1,0 +1,29 @@
+1) Загрузка boinc api (http://files.nativeboinc.org/boinc_api/)
+2) Загрузка дополнительногго файла version.h (https://github.com/BOINC/boinc)
+3) Редактирование функции WinMain: указание явного преобразования типов
+command_line = (LPSTR)GetCommandLine();
+4) Исправление ошибки при компиляции:
+'strcpy' This function or variable may be unsafe.
+Добавление строки:
+#define _CRT_SECURE_NO_WARNINGS 1
+4) Ошибка при компиляции:
+Ссылка на неразрешённый внешний символ boinc_init
+Недопустимый или повреждённый файл (libboinc.a): не удаётся прочитать по 0х85050
+
+5) Изменение входных данных в свойстве проекта (Компоновщик -> Ввод) с
+libboinc.a
+libboinc_api.a
+libboinc_crypt.a
+libboinc_opencl.a
+libcrypto.a
+libcurl.a
+libssl.a
+на
+-lboinc
+-lboinc_api
+-lboinc_crypt
+-lboinc_opencl
+-lcrypto
+-lcurl
+-lssl
+Результат: ошибка сохранилась
